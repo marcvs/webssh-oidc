@@ -34,7 +34,7 @@ webssh:
 package:
   stage: package
   image:
-    name: docker:stable
+    name: marcvs/build_generic_debian-trixie:latest
   services:
     - docker:dind
   # only:
@@ -49,7 +49,10 @@ package:
     REPO_HOST: repo.data.kit.edu
     REPO_USER: cicd
   before_script:
-    - apk add bash git
+    - |
+      echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | sudo tee /etc/apt/sources.list.d/goreleaser.list
+      apt update
+      apt-get -y install bash git nfpm
   script:
     - |
       [[ "$CI_COMMIT_TAG" == "${PREREL_BRANCH_NAME}" ]] && {
