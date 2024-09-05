@@ -57,8 +57,5 @@ PACKAGE_VERSION=$(cat package.json | jq -r ."version")
 PR_VERSION="${PACKAGE_VERSION}-${DEVSTRING}${PREREL}"
 
 
-export VERSION=${PR_VERSION}
-
-cat packaging/nfpm.yaml.template | \
-    envsubst \
-    > nfpm.yaml
+VERSION_ESCAPED=$(echo ${VERSION} | sed s/\\\./\\\\./g); echo $VER
+sed "s/${VERSION_ESCAPED}/${PR_VERSION}/" -i  nfpm.yaml
