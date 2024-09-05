@@ -2,7 +2,7 @@ name: "webssh-oidc"
 arch: "all"
 platform: "linux"
 version_schema: semver
-version: "0.1.0"
+version: "${VERSION}"
 release: 1
 epoch: 2
 section: "misc"
