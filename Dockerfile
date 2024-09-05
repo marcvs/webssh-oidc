@@ -6,6 +6,8 @@ COPY . /app
 RUN npm install
 RUN npm run build
 
+
+
 FROM node:18-buster-slim as runner
 
 ENV DEBIAN_FRONTEND=noninteractive
