@@ -1,5 +1,7 @@
 name: "webssh-oidc"
 arch: "all"
+rpm:
+  rpm_arch: ia64i
 platform: "linux"
 version_schema: semver
 version: "${VERSION}"
@@ -13,6 +15,8 @@ provides:
 - webssh-oidc
 depends:
 - nodejs
+- openssl
+- envsubst
 # recommends:
 # - whatever
 # suggests:
@@ -57,7 +61,7 @@ overrides:
     - src: ./config/webssh-oidc.service
       dst: /usr/lib/systemd/system/webssh-oidc.service
     - src: ./.env.example
-      dst: /etc/webssh-oidc/environment
+      dst: /etc/webssh-oidc/environment.temp
       type: config|noreplace
     - src: ./config/default.yml
       dst: /etc/webssh-oidc/default.yml.example
