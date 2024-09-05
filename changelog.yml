@@ -1,0 +1,869 @@
+- semver: 0.2.4
+  date: 2024-09-05T10:13:42.737831114+02:00
+  packager: ""
+  changes:
+    - commit: a1692da78b8bc9f390f694729e70af1a729a541c
+      note: cicd boilerplate
+      author:
+        name: Marcus
+        email: marcus@hardt-it.de
+      committer:
+        name: Marcus
+        email: marcus@hardt-it.de
+    - commit: 530351c5920339dccbfe2daa026ca8c424370b76
+      note: packaging definition
+      author:
+        name: Marcus
+        email: marcus@hardt-it.de
+      committer:
+        name: Marcus
+        email: marcus@hardt-it.de
+    - commit: 66fe004e601b0abed128db2c7be65f81b0739b0e
+      note: service script
+      author:
+        name: Marcus
+        email: marcus@hardt-it.de
+      committer:
+        name: Marcus
+        email: marcus@hardt-it.de
+    - commit: 5aa0d08058bb61a42450fc1fc7cd04853bcf409a
+      note: add default config with working redirects to localhost
+      author:
+        name: Marcus
+        email: marcus@hardt-it.de
+      committer:
+        name: Marcus
+        email: marcus@hardt-it.de
+    - commit: 0d105b49df35ea2ef51da36b1e85ac608f72e33a
+      note: MIT License
+      author:
+        name: Marcus
+        email: marcus@hardt-it.de
+      committer:
+        name: Marcus
+        email: marcus@hardt-it.de
+- semver: 0.2.3
+  date: 2024-06-09T21:22:20+02:00
+  packager: Marcus Hardt <hardt@kit.edu>
+  changes:
+    - commit: d93b638016a577fb6b146aae90c439db667193e9
+      note: |-
+        Merge pull request #18 from dianagudu/prerel
+
+        v0.2.3
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: 8f692a5952cf8f9fc93e07384dc5fbe44f81c7d6
+      note: fix websocket path
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 9b7df4f6260e68662e000ca685dbeb7b5f5fa3c0
+      note: |-
+        Merge pull request #17 from dianagudu/prerel
+
+        v0.2.3
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: 16fbe2f9447e797db843cd34d836d3990b18ff18
+      note: 'fix #15 resizing issue, update deps'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 8c63e3f28f00db3c5997ed0f8f40ca195f3afc08
+      note: add all info from op to displayed profile
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 7e8f4ee89d20be964be972fdef106a241ed25164
+      note: add user menu to navbar with profile and help options
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 13efcaf5baf754184535a6deb3c2418f9e579287
+      note: remove NEXTAUTH_URL env var for production deployments
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+- semver: 0.2.2
+  date: 2024-04-17T10:46:57+02:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: a5be229d9cc345dbb325917da9fabe4675a26146
+      note: |-
+        Merge pull request #16 from dianagudu/prerel
+
+        temporarily disable resizing (on all browsers)
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: ac882b52442bdaefbd480b0706aebbd06e326078
+      note: temporarily disable resizing (on all browsers)
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 7d69fe7da2ffba92215e5d95d7f3e6339b0cd983
+      note: increase timeout for motley-cue api calls
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+- semver: 0.2.1
+  date: 2024-03-25T19:03:17+01:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: 4a7935ab6d497c9ffb192fb61adc2e89160f09e2
+      note: |-
+        Merge pull request #13 from dianagudu/prerel
+
+        fixes for running in production
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: 7d69fe7da2ffba92215e5d95d7f3e6339b0cd983
+      note: increase timeout for motley-cue api calls
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: b77610f1cce5bffc3fcf4acb6643e2f489507ca2
+      note: fixes for running in production
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: a22da20706d2db92d70f69b95df005b81839e421
+      note: update dockerfile cmd
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 00eab4039de62927743141e2a85f42c3dde13e3e
+      note: |-
+        Merge pull request #12 from dianagudu/prerel
+
+        update dockerfile cmd
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+- semver: 0.2.0
+  date: 2024-03-25T15:10:55+01:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: 946ceccbfab5b955bf1476a3b661ae2a56228dd7
+      note: |-
+        Merge pull request #11 from dianagudu/prerel
+
+        update github actions versions for node 20
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: e12a683f9827cc1a8552a4b8c3580786ff50bf4d
+      note: update github actions versions for node 20
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 71a8417142544b1141d283f74d9ccb78c19d044b
+      note: |-
+        Merge pull request #10 from dianagudu/prerel
+
+        v0.2.0
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: c7c57a84124331738ebbc5a2fe07a8194c2f1c4a
+      note: remove auth secret from authjs config
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 20e5cfb980e3673ae4a8dba68ae422b1cc371a06
+      note: 'construct ws url: should run on same origin'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: e7c04c58397e15aca025ff81136e096ee9ba571b
+      note: update node version in ci
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 23cf82515521369643a2cefc7f002f0c08033459
+      note: simplify ui, add multiple terminal sessions, fixes
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: ff5d34ec3ddc61ce70ca8fed02e4b23fc39888d6
+      note: 'refactor: working version'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 9d083755f861f7c7ad1f023d98db45742dffb771
+      note: add logo
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: c63a9bb280277da39dbe6e2aa587ba79b95a06c8
+      note: add support for EGI demo OP
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+- semver: 0.1.0
+  date: 2023-10-10T01:21:02+02:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: 8a6d4a209b46c669f9baef9b9496ce2495c8d16c
+      note: |-
+        Merge pull request #6 from dianagudu/prerel
+
+        v0.1.0
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: 85d04247fc59767472497a3f47315cdf0a7a634f
+      note: bump up version 0.0.6 -> 0.1.0
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 29ea4b7f7f1102b721f1dc162f2ca206a61126d0
+      note: restart container on failure
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 37460b2ac7da0e2e556917b210488718ba262509
+      note: add voperson claims to profiles
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 07c8469ac50ef413baaedeacefb135a43302de4e
+      note: add eduteams provider
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 4afe430d0b6eb4f84ef0977be7ff5cdab5c08eda
+      note: display OP options as logo & name
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+- semver: 0.0.6
+  date: 2023-10-02T15:29:23+02:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: c7460e5f226c86ede123a293a638ea6277dc385e
+      note: |-
+        Merge pull request #5 from dianagudu/prerel
+
+        v0.0.6
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: ad8019fb9ee76e144a564f1b324be1d7f86c26ff
+      note: bump up version 0.0.5 -> 0.0.6
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: d5a82c189cd3e05ce855e08c278228b58d704ac6
+      note: add privacy policy; use iconify icons
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: d151795317cab34c991f2c978e02c4642b4384e3
+      note: migrate to svelte v4
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: bb01eaa9591b5a4f046dd9be447f12bf5c9fb090
+      note: only cd on semver tags, add info to readme on versions, bump up to 0.0.5
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 7b648e426a6c9087d6f0faa7a0d72dddc91be727
+      note: harmonise version numbers
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 5f4f16c9e35f2272f2b9984cc02b28ec8461e5d1
+      note: 'ci: use latest tag for deployment'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: ae79f2803c8f1e1b9ef944769a60d7dec050592d
+      note: 'ci: skip building docker images on PRs'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+- semver: 0.0.4
+  date: 2023-07-10T19:22:50+02:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: 042d47cb9633ceee8f8a9a1ae1b135d9d1753d6d
+      note: |-
+        Merge pull request #3 from dianagudu/prerel
+
+        v0.0.4
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: 7dda078898726b37b729e5ce774582fa4db6f327
+      note: only trigger deploy action on tags; bump up version 0.0.3 -> 0.0.4
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 2b1f945e178a8d1dfd5d86d2986d2023741213c6
+      note: use tmp known_hosts file in deploy action
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: a1f7c13016ba743fc803129c54a6303f92c838c6
+      note: fix sshpass command 9
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 8bbeea199540754cfe622a4e96b22363566cf519
+      note: fix sshpass command 8
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 839942f66331249ce3e68b4ffdf90bba73f6428b
+      note: fix sshpass command 7
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: fac478fe711204020d1cb38a3a202c3d41cf4295
+      note: fix sshpass command 6
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: bc95bd436608b058bae37cce5ae5af848c6af3a3
+      note: fix sshpass command 5
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 3d411baa908645db74b0d11ad07ed652cc3de0cf
+      note: fix sshpass command 4
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 489fb0f2f1ece1aa8f5a29d67952ee90beea864e
+      note: fix sshpass command 3
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 76899ed9aab4f65dbec07cff2540e866c166792e
+      note: fix sshpass command 2
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 010a71a611c23f0408c8ed12f5c19b7ad9ddd639
+      note: fix sshpass command
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: fdad85c4201b5f4498079c3d8c9c4adb777755d9
+      note: fix deploy action
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 0b287be67c3559145c74c593a86b6898eb82c450
+      note: use sshpass in deploy action
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 970277668d08d2e581e9a4b44f2f15f825ee686e
+      note: 'fix deploy action: try another ssh connect action'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: bef47074ca4f7f6965e224b0072beba1a727b6e7
+      note: 'fix deploy action: passing access token between job steps'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 3f135bfe47c6a5007b618d633635413ae9c6414b
+      note: 'fix deploy action: mytoken installation'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 91056cf8c59daf82cba7e15a4a4a022420eca978
+      note: mask access token in deployment action
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 780c4b18415e92ab72cdac8230d9d484d4383bb6
+      note: add deployment job to ci
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+- semver: 0.0.3
+  date: 2023-07-10T10:57:30+02:00
+  packager: GitHub <noreply@github.com>
+  changes:
+    - commit: fe201e478481cae8e046dd4a9f178e3925e419cf
+      note: |-
+        Merge pull request #2 from dianagudu/prerel
+
+        v0.0.3
+      author:
+        name: dianagudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: GitHub
+        email: noreply@github.com
+    - commit: 53a47bb1e35205437cc11ce9a7f16e6e8f307184
+      note: bump up version 0.0.2 -> 0.0.3
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: fd71d8e5ca64b5f50dd081b3b6dc56ead204c597
+      note: fix docker image name in ci-cd
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: c31a52404d41c538c113b052cc45ec0d9e1c8cdd
+      note: fix docker image name in ci-cd
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 511e00540498793d98fca04ac240b72686cf0cd4
+      note: multi-stage Dockerfile for build folder
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 41b8abafc1c4f1de998fa3924bfd011a2b99747c
+      note: disable npm test in ci
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 8a67b9860486a50fc3d0146f45ab8dc101954e52
+      note: update dep versions
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: ff9762b99d76546aaa7efc60c2f43f19de0cfd71
+      note: fix workflow error
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 0dc56401d330b5550097ee6e67b3a117023e8a8c
+      note: add npm build and test job to ci
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 0f8d8c0798e2246d67a685d23169d8766edc8215
+      note: add dummy tests
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 65e8f6fb12100c7ef46244561a73487d5b021691
+      note: add ci for building and publishing docker images
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: e09f7a79435c1e5450fa8bb805321030c10d1a4f
+      note: update dep versions
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 8924e8cb9c65ce1631fa132c29539a7ec49e31c9
+      note: refactor terminal code
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: ca18c53c24672df670b64e881b0b11d2b585412c
+      note: fix clipboard support on firefox
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 3ce37a541aa52619cb96f416bffbceb3f649342b
+      note: support ws and wss for websocket
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: d679c2741405d8edb65427ec4edc66454d67210d
+      note: fix firefox fetch network error
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 392c7d5b63682fa22809295927e3fbbb6d74c053
+      note: update dep versions
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: dc7941297d20d707ebf95ae160a97715530ec3f4
+      note: disable term resize for now, firefox doesn't work
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: aaa7afcbb14cade991a955ae5a0cea9c61966e7f
+      note: use dynamic env instead of static for motley-cue&ssh vars
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: cac6599aa2bbba1b25f55521ce0f16ee65f85aad
+      note: update readme with info on running with docker
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: b4813de89dfb7ef9557ab897d780ffe53bb7c0a3
+      note: add docker and compose files
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: ae9e519de9463614345a5f3bfe89f4a52169469a
+      note: use public hostname for connecting to ws
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: e8b167a960859bd0352b229f8c128d61b0f3a947
+      note: fix error printing
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: ef2a38f91569699da11f33e8754878d771311fec
+      note: fix scopes passed to signIn
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 07316ab0d7c9494c99881bc102356afe7d53137f
+      note: fix error handling when not authorised
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: db91c1e46d4a47f7902c82586f59406e85153775
+      note: 'add configs for more OPs: helmholtz, simplesaml, egi'
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: a1a1cadd700cee6740cb13783feaa10abd5a713f
+      note: updte deps
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 5643bca2f4006c851a1ef3e4e501d8e643f59b8c
+      note: terminate ssh connection on ws close, e.g. page reload
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: e7270d8ea75ce77abb301794433f11eb58a4be57
+      note: fix terminal resize and reload
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: f7a0918037912fa8d3d9f63fc5de44c76c40bf3f
+      note: fix mccli cmd
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 70f03c9cf7801979475842ddc80d4f84944b91bb
+      note: proper op selection
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: c174a05a6c83a6d86c97ed841b4476d6791a1f1e
+      note: fix egi dev provider to get userinfo + dep updates
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 4a73ed48153bff292e1f16e1bd27288108914ae9
+      note: add config file for providers
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 9dfc68df4389de34d891d56f23c40bf492e889ef
+      note: own select component and other fixes
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: 7d57d73f12265255ad4549be14aea06aba4a03b4
+      note: more prettier and settings
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: c02fc6142ed9bba108843d1bcea57474e1a1afbf
+      note: apply prettier
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+    - commit: cbe3449dab415fe6a1dfd424febf7f6bba3a3ee0
+      note: initial commit
+      author:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
+      committer:
+        name: Diana Gudu
+        email: diana.gudu@kit.edu
