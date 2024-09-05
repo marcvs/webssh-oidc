@@ -22,7 +22,7 @@ default:
     paths:
       - .cache
 
-webssh:
+build:
   stage: build
   image:
     name: node:18-buster-slim
@@ -30,6 +30,8 @@ webssh:
     - |
       npm install
       npm run build
+      echo "find"
+      find .
 
 package:
   stage: package
