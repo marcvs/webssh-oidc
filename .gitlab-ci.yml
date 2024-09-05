@@ -75,7 +75,7 @@ package:
       .gitlab-ci-scripts/package.sh
   artifacts:
     paths:
-      - "build/*"
+      - "results/*"
 
 # test:
 #   stage: test
