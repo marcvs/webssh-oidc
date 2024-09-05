@@ -50,7 +50,7 @@ package:
     REPO_USER: cicd
   before_script:
     - |
-      echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | sudo tee /etc/apt/sources.list.d/goreleaser.list
+      echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' > /etc/apt/sources.list.d/goreleaser.list
       apt update
       apt-get -y install bash git nfpm
   script:
