@@ -56,4 +56,4 @@ done
 PACKAGE_VERSION=$(cat package.json | jq -r ."version")
 PR_VERSION="${PACKAGE_VERSION}-${DEVSTRING}${PREREL}"
 
-sed "s/VERSION:.*/version: ${VERSION}/i" -i  nfpm.yaml
+sed "s/VERSION:.*/version: ${PR_VERSION}/i" -i  nfpm.yaml
