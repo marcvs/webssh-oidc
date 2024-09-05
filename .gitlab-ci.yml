@@ -32,6 +32,10 @@ build:
       npm run build
       echo "find"
       find .
+  artifacts:
+    paths:
+      - "build/*"
+
 
 package:
   stage: package
@@ -71,7 +75,7 @@ package:
       .gitlab-ci-scripts/package.sh
   artifacts:
     paths:
-      - "results/*"
+      - "build/*"
 
 # test:
 #   stage: test
