@@ -51,12 +51,14 @@ done
 }
 
 # use version file:
-VERSION=$(cat "$VERSION_FILE")
-PR_VERSION="${VERSION}-${DEVSTRING}${PREREL}"
-echo "$PR_VERSION" > "$VERSION_FILE"
-echo "$PR_VERSION"
+# VERSION=$(cat "$VERSION_FILE")
+# use version fro npm package
+PACKAGE_VERSION=$(cat package.json | jq -r ."version")
+PR_VERSION="${PACKAGE_VERSION}-${DEVSTRING}${PREREL}"
 
-echo "$PR_VERSION" > "$VERSION_FILE"
-git add "$VERSION_FILE"
-git commit -m "dummy prerel version"
-git tag "v${PR_VERSION}"
+
+export VERSION=${PR_VERSION}
+
+cat packaging/nfpm.yaml.template | \
+    envsubst \
+    > nfpm.yaml
