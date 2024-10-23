@@ -1,7 +1,7 @@
 name: "webssh-oidc"
 arch: "all"
 rpm:
-  rpm_arch: ia64i
+  rpm_arch: ia64
 platform: "linux"
 version_schema: semver
 version: "${VERSION}"
