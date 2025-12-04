@@ -48,8 +48,12 @@ Also add your webssh user to the `docker` group
 
 1. As user build the container:
     ```
-    docker build -t webssh-oidc .
+    docker build -t marcvs/webssh-oidc .
     ```
+1. Maybe push the container:
+   ```
+   docker push marcvs/webssh-oidc
+   ```
 
 1. Configure using:
     - `.env`
@@ -64,3 +68,19 @@ One  will have to install certificates:
 ```
 docker run --rm --publish 80:80 --publish 443:443 -it certbot/certbot:latest certonly
 ```
+
+
+add clients for:
+- didmos
+    https://auth.didmos.nfdi-aai.de
+- academicID
+    https://keycloak.sso.gwdg.de/auth/realms/academiccloud
+- regapp
+    https://regapp.nfdi-aai.de/oidc/realms/nfdi
+- unity
+    https://login.helmholtz.de/oauth2
+    https://login.helmholtz.de/punch-oauth2
+- infraproxy
+    https://infraproxy.nfdi-aai.dfn.de
+- edu-id:
+    https://proxy.edu-id.dfn.de
