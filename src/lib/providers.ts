@@ -5,6 +5,8 @@ import logo_helmholtz from '$lib/assets/provider-logos/helmholtz.png';
 import logo_wlcg from '$lib/assets/provider-logos/wlcg.jpeg';
 import logo_eduteams from '$lib/assets/provider-logos/eduteams.png';
 import logo_generic from '$lib/assets/provider-logos/oidc.png';
+import logo_nfdi_infra from '$lib/assets/provider-logos/nfdi.png';
+import logo_kit from '$lib/assets/provider-logos/kit.png';
 
 export type Provider = {
 	name?: string;
@@ -47,6 +49,14 @@ export const providers: Record<string, Provider> = {
 	'https://proxy.eduteams.org': {
 		name: 'eduTEAMS',
 		logo: logo_eduteams
+	},
+	'https://infraproxy.nfdi-aai.dfn.de': {
+		name: 'NFDI Infrastructure Proxy',
+		logo: logo_nfdi_infra
+	},
+    'https://oidc.scc.kit.edu/auth/realms/kit': {
+		name: 'KIT',
+		logo: logo_kit
 	}
 };
 
