@@ -1,7 +1,6 @@
 import type { OAuth2Config } from '@auth/core/providers';
 import type { Profile } from '@auth/core/types';
 import Google from '@auth/core/providers/google';
-
 import DeepHDC from '$lib/server/providers/deephdc';
 import Helmholtz from '$lib/server/providers/helmholtz';
 import HelmholtzDev from '$lib/server/providers/helmholtz_dev';
@@ -12,6 +11,8 @@ import SimpleSaml from '$lib/server/providers/simplesaml';
 import Wlcg from '$lib/server/providers/wlcg';
 import eduTEAMS from '$lib/server/providers/eduteams';
 import Generic from '$lib/server/providers/generic';
+import NfdiInfra from '$lib/server/providers/nfdi_infra';
+import KIT from '$lib/server/providers/kit';
 
 import type { ProviderConfig } from '$lib/server/config';
 import CONFIG from '$lib/server/config';
@@ -47,6 +48,10 @@ function loadProvider(provider_config: ProviderConfig) {
 			return eduTEAMS(auth);
 		case 'https://et3.gndev.hexaa.eu':
 			return SimpleSaml(auth);
+        case 'https://infraproxy.nfdi-aai.dfn.de':
+            return NfdiInfra(auth);
+        case 'https://oidc.scc.kit.edu/auth/realms/kit':
+            return KIT(auth);
 		default:
 			console.log(`Issuer ${issuer} not supported, using generic provider.`);
 			return Generic(provider_config);
