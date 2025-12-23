@@ -1,6 +1,9 @@
-FROM node:18-buster-slim as builder
+# FROM node:20-trixie-slim as builder
+FROM node:20-trixie as builder
 
 WORKDIR /app
+
+RUN apt update && apt -y install iputils-ping net-tools netcat-openbsd httpie curl
 
 COPY . /app
 RUN npm install
@@ -8,7 +11,8 @@ RUN npm run build
 
 
 
-FROM node:18-buster-slim as runner
+# FROM node:20-trixie-slim as runner
+FROM node:20-trixie as runner
 
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
