@@ -1,6 +1,7 @@
 import type { OAuthUserConfig, OAuthConfig } from '@auth/core/providers';
+import logger from '$lib/server/logger';
 
-export interface GenericProfile extends Record<string, unknown> {
+export interface GenericProfile extends Record<string, any> {
 	aud: string;
 	azp: string;
 	email: string;
@@ -22,12 +23,14 @@ export interface GenericProfile extends Record<string, unknown> {
 export default function Generic<P extends GenericProfile>(
 	options: OAuthUserConfig<P>
 ): OAuthConfig<P> {
-	return {
+    // logger.debug(`GENERIC provider function called with options: ${JSON.stringify(options, null, 2)}`);
+	const config = {
 		id: 'generic',
 		name: 'Generic Provider',
 		type: 'oidc',
-		authorization: { params: { scope: 'openid profile email' } },
-		checks: ['pkce', 'state'],
+		checks: ['pkce', 'state'], 
 		...options
 	};
+	logger.debug(`GENERIC provider final config:${JSON.stringify(config, null, 2)}`);
+    return config;
 }
