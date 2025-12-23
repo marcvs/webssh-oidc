@@ -11,15 +11,20 @@ import SimpleSaml from '$lib/server/providers/simplesaml';
 import Wlcg from '$lib/server/providers/wlcg';
 import eduTEAMS from '$lib/server/providers/eduteams';
 import Generic from '$lib/server/providers/generic';
-import NfdiInfra from '$lib/server/providers/nfdi_infra';
-import KIT from '$lib/server/providers/kit';
+// import KIT from '$lib/server/providers/kit';
+// import NfdiInfra from '$lib/server/providers/nfdi-infra';
+// import KitFels from '$lib/server/providers/fels-kit-edu';
 
 import type { ProviderConfig } from '$lib/server/config';
 import CONFIG from '$lib/server/config';
+import logger from '$lib/server/logger';
+
+logger.debug(`CONFIG object loaded: ${JSON.stringify(CONFIG, null, 2)}`);
 
 const providers = CONFIG.providers.map(loadProvider) as OAuth2Config<Profile>[];
 
 function loadProvider(provider_config: ProviderConfig) {
+
 	const auth = {
 		clientId: provider_config.clientId,
 		clientSecret: provider_config.clientSecret
@@ -27,6 +32,8 @@ function loadProvider(provider_config: ProviderConfig) {
 	const issuer = provider_config.issuer
 		.trim() // remove leading and trailing whitespace
 		.replace(/\/+$/, ''); // remove trailing slashes
+    logger.debug(`Issuer: ${issuer}`);
+    console.log(`Issuer: ${issuer}`); // temp test
 	switch (issuer) {
 		case 'https://accounts.google.com':
 			return Google(auth);
@@ -41,20 +48,22 @@ function loadProvider(provider_config: ProviderConfig) {
 		case 'https://login-dev.helmholtz.de/oauth2':
 			return HelmholtzDev(auth);
 		case 'https://login.helmholtz.de/oauth2':
-			return Helmholtz(auth);
+            return Helmholtz(auth);
 		case 'https://wlcg.cloud.cnaf.infn.it':
 			return Wlcg(auth);
 		case 'https://proxy.eduteams.org':
 			return eduTEAMS(auth);
 		case 'https://et3.gndev.hexaa.eu':
 			return SimpleSaml(auth);
-        case 'https://infraproxy.nfdi-aai.dfn.de':
-            return NfdiInfra(auth);
-        case 'https://oidc.scc.kit.edu/auth/realms/kit':
-            return KIT(auth);
+        // case 'https://infraproxy.nfdi-aai.dfn.de':
+        //     return NfdiInfra(auth);
+        // case 'https://oidc.scc.kit.edu/auth/realms/kit':
+        //     // return KIT(auth);
+        //     return Generic(provider_config);
 		default:
-			console.log(`Issuer ${issuer} not supported, using generic provider.`);
-			return Generic(provider_config);
+			console.log(`Issuer ${issuer} supported via generic provider.`);
+            return Generic(provider_config);
+			// return Generic(auth);
 	}
 }
 
