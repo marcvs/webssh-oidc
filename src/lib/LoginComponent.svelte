@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { signIn } from '@auth/sveltekit/client';
+	import { page } from '$app/stores';
 
 	import logo from '$lib/assets/webssh-oidc-square.png';
 	import MyAlert from '$lib/MyAlert.svelte';
@@ -81,6 +82,9 @@
 			defaultOps = await loadOpsWrapper(fetch, mcEndpoint);
 			supportedOps = [...defaultOps];
 			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value));
+			
+			// Handle IdP hinting
+			handleIdpHint();
 		} catch (e) {
 			defaultMc = { ...resetHost };
 			mcHost = { ...resetHost };
@@ -150,6 +154,43 @@
 		return obj && typeof obj == 'object' && key in obj;
 	}
 
+	function handleIdpHint() {
+		const idpHint = $page.url.searchParams.get('idphint');
+		
+		if (!idpHint) {
+			console.debug('No idphint parameter found');
+			return;
+		}
+		
+		console.log(`IdP hint received: ${idpHint}`);
+		
+		// Check if the hint matches any of our supported OPs
+		if (!filteredOps || !filteredOps.includes(idpHint)) {
+			console.log(`IdP hint "${idpHint}" not found in supported OPs:`, filteredOps);
+			return;
+		}
+		
+		// Check if the hinted OP is a known provider
+		if (!isKeyOf(idpHint, providers)) {
+			console.log(`IdP hint "${idpHint}" not found in providers configuration`);
+			return;
+		}
+		
+		console.log(`Valid IdP hint found: ${idpHint}, auto-selecting and logging in`);
+		
+		// Auto-select the OP
+		selectedOp = idpHint;
+		hasSelectedOp = true;
+		
+		// Auto-trigger login after a short delay to ensure UI state is updated
+		setTimeout(() => {
+			if (canSubmit) {
+				console.log('Auto-triggering login due to IdP hint');
+				handleLogin();
+			}
+		}, 100);
+	}
+
 	const handleLogin = async () => {
 		try {
 			$uiBlock = true;
@@ -185,7 +226,7 @@
 	{#if $errorMessage}
 		<MyAlert />
 	{/if}
-	<form class="mt-8 space-y-6" action="#" method="POST" on:submit|preventDefault={handleLogin}>
+	<form class="mt-8 space-y-6" on:submit|preventDefault={handleLogin}>
 		<input type="hidden" name="remember" value="true" />
 		<div class="-space-y-px rounded-md">
 			<div>
