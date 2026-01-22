@@ -4,9 +4,25 @@ type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promi
 
 const ABORT_TIMEOUT = 10000;
 
+/**
+ * Safely append a path segment to a URL, ensuring proper slash handling.
+ * Handles cases where base path may or may not have a trailing slash.
+ */
+const appendPath = (baseUrl: URL, path: string): URL => {
+	const url = new URL(baseUrl);
+	// Ensure base pathname ends with / before appending
+	if (!url.pathname.endsWith('/')) {
+		url.pathname += '/';
+	}
+	// Remove leading slash from path if present
+	url.pathname += path.replace(/^\//, '');
+	return url;
+};
+
 export const loadOps = async (fetch: Fetch, mcEndpoint: URL) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'info';
+	const url = appendPath(mcEndpoint, 'info');
+	console.debug('[motley_cue] loadOps: mcEndpoint =', mcEndpoint.toString());
+	console.debug('[motley_cue] loadOps: final URL =', url.toString());
 
 	const response = await fetch(url, { signal: AbortSignal.timeout(ABORT_TIMEOUT) });
 	if (response.ok) {
@@ -29,9 +45,10 @@ export const loadOps = async (fetch: Fetch, mcEndpoint: URL) => {
 };
 
 export const loadOpInfo = async (fetch: Fetch, mcEndpoint: URL, opUrl: string) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'info/op';
+	const url = appendPath(mcEndpoint, 'info/op');
 	url.searchParams.set('url', opUrl);
+	console.debug('[motley_cue] loadOpInfo: mcEndpoint =', mcEndpoint.toString());
+	console.debug('[motley_cue] loadOpInfo: final URL =', url.toString());
 
 	const response = await fetch(url, { signal: AbortSignal.timeout(ABORT_TIMEOUT) });
 	if (response.ok) {
@@ -56,8 +73,9 @@ export const loadOpInfo = async (fetch: Fetch, mcEndpoint: URL, opUrl: string) =
 };
 
 export const deployUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'user/deploy';
+	const url = appendPath(mcEndpoint, 'user/deploy');
+	console.debug('[motley_cue] deployUser: mcEndpoint =', mcEndpoint.toString());
+	console.debug('[motley_cue] deployUser: final URL =', url.toString());
 
 	const response = await fetch(url, {
 		headers: {
@@ -88,8 +106,9 @@ export const deployUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: str
 };
 
 export const getUserStatus = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'user/get_status';
+	const url = appendPath(mcEndpoint, 'user/get_status');
+	console.debug('[motley_cue] getUserStatus: mcEndpoint =', mcEndpoint.toString());
+	console.debug('[motley_cue] getUserStatus: final URL =', url.toString());
 
 	const response = await fetch(url, {
 		headers: {
