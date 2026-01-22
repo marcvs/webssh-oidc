@@ -6,7 +6,9 @@ import providers from '$lib/server/providers';
 // hook for auth.js oidc authentication
 export const { handle, signIn, signOut } = SvelteKitAuth({
 	trustHost: true,
-	useSecureCookies: process.env.NODE_ENV === 'production',
+    // FIXME: marcus put this back when moving to https
+    useSecureCookies: process.env.NODE_ENV === 'production',
+	// useSecureCookies: false,
 	providers: providers,
 	callbacks: {
 		async jwt({ token, account, user, profile }) {
