@@ -17,6 +17,8 @@ FROM node:20-trixie-slim as runner
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
+RUN apt-get update && apt-get -y install netcat-openbsd iproute2 net-tools iputils-ping telnet procps neovim
+
 COPY package.json /app/package.json
 RUN npm install
 RUN npm ci --only=production
