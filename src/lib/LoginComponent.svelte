@@ -1,4 +1,5 @@
 <script lang="ts">
+// vim:ft=javascript
 	import { onMount } from 'svelte';
 	import { signIn } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
@@ -222,7 +223,6 @@
 		const idpHint = $page.url.searchParams.get('idphint');
 		
 		if (!idpHint) {
-			console.debug('No idphint parameter found');
 			return;
 		}
 		
