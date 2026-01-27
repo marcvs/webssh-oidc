@@ -1,4 +1,5 @@
 <script lang="ts">
+    // vim: ft=javascript
 	import '@xterm/xterm/css/xterm.css';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { resize } from 'svelte-resize-observer-action';
@@ -49,9 +50,16 @@
 	}
 
 	onMount(async () => {
+        console.debug('[TerminalComponent] onMount: loginParams =', JSON.stringify(loginParams, null, 2));
 		if (!loginParams || !loginParams.accessToken) {
 			$errorMessage = 'Please log in again.';
 			await signOut();
+		}
+
+		if (!loginParams.sshUser) {
+			console.error('[TerminalComponent] No SSH username provided!');
+			$errorMessage = 'No SSH username - motley_cue connection may have failed.';
+			return;
 		}
 
 		const libterm = await import('$lib/terminal');
@@ -59,20 +67,32 @@
 		wsConnectUrl.searchParams.set('sshHostname', loginParams.sshHost.hostname);
 		wsConnectUrl.searchParams.set('sshPort', loginParams.sshHost.port.toString());
 		wsConnectUrl.searchParams.set('username', loginParams.sshUser);
+        console.log('[TerminalComponent] WebSocket URL:', wsConnectUrl.toString());
+        console.log('[TerminalComponent] Creating WebSocket connection...');
 
 		if (termDiv) {
 			term = new libterm.Terminal(termDiv);
 			// connect to websocket and timeout after a few seconds
-			const ws = new WebSocket(wsConnectUrl, loginParams.accessToken);
+			let ws: WebSocket;
+			try {
+				ws = new WebSocket(wsConnectUrl, loginParams.accessToken);
+                console.log('[TerminalComponent] WebSocket created, readyState:', ws.readyState);
+			} catch (err) {
+				console.error('[TerminalComponent] WebSocket creation failed:', err);
+				$errorMessage = `WebSocket creation failed: ${err}`;
+				return;
+			}
 
 			let timeout: NodeJS.Timeout | undefined = undefined;
 			ws.onopen = () => {
+                console.log('[TerminalComponent] WebSocket opened successfully');
 				if (timeout) clearTimeout(timeout);
 			};
 			ws.onclose = (ev: CloseEvent) => {
+                console.log('[TerminalComponent] WebSocket closed:', { code: ev.code, reason: ev.reason, wasClean:
 				if (ev.code !== 1000) {
 					// 1000 = normal close (https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
-					$errorMessage = ev.reason;
+					$errorMessage = ev.reason || `WebSocket closed with code ${ev.code}`;
 				}
 				setTimeout(async () => {
 					// await signOut();
@@ -80,6 +100,7 @@
 				}, 500);
 			};
 			ws.onerror = async (ev: Event) => {
+				console.error('[TerminalComponent] WebSocket error:', ev);
 				$errorMessage = 'Could not connect to SSH server.';
 				// await signOut();
 				closeTerminal();
