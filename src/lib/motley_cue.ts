@@ -21,8 +21,8 @@ const appendPath = (baseUrl: URL, path: string): URL => {
 
 export const loadOps = async (fetch: Fetch, mcEndpoint: URL) => {
 	const url = appendPath(mcEndpoint, 'info');
-	console.debug('[motley_cue] loadOps: mcEndpoint =', mcEndpoint.toString());
-	console.debug('[motley_cue] loadOps: final URL =', url.toString());
+    console.debug('[motley_cue] loadOps: mcEndpoint =', mcEndpoint.toString());
+    console.debug('[motley_cue] loadOps: final URL =', url.toString());
 
 	const response = await fetch(url, { signal: AbortSignal.timeout(ABORT_TIMEOUT) });
 	if (response.ok) {
@@ -47,8 +47,8 @@ export const loadOps = async (fetch: Fetch, mcEndpoint: URL) => {
 export const loadOpInfo = async (fetch: Fetch, mcEndpoint: URL, opUrl: string) => {
 	const url = appendPath(mcEndpoint, 'info/op');
 	url.searchParams.set('url', opUrl);
-	console.debug('[motley_cue] loadOpInfo: mcEndpoint =', mcEndpoint.toString());
-	console.debug('[motley_cue] loadOpInfo: final URL =', url.toString());
+    console.debug('[motley_cue] loadOpInfo: mcEndpoint =', mcEndpoint.toString());
+    console.debug('[motley_cue] loadOpInfo: final URL =', url.toString());
 
 	const response = await fetch(url, { signal: AbortSignal.timeout(ABORT_TIMEOUT) });
 	if (response.ok) {
@@ -74,8 +74,8 @@ export const loadOpInfo = async (fetch: Fetch, mcEndpoint: URL, opUrl: string) =
 
 export const deployUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
 	const url = appendPath(mcEndpoint, 'user/deploy');
-	console.debug('[motley_cue] deployUser: mcEndpoint =', mcEndpoint.toString());
-	console.debug('[motley_cue] deployUser: final URL =', url.toString());
+    console.debug('[motley_cue] deployUser: mcEndpoint =', mcEndpoint.toString());
+    console.debug('[motley_cue] deployUser: final URL =', url.toString());
 
 	const response = await fetch(url, {
 		headers: {
@@ -107,8 +107,8 @@ export const deployUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: str
 
 export const getUserStatus = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
 	const url = appendPath(mcEndpoint, 'user/get_status');
-	console.debug('[motley_cue] getUserStatus: mcEndpoint =', mcEndpoint.toString());
-	console.debug('[motley_cue] getUserStatus: final URL =', url.toString());
+    console.debug('[motley_cue] getUserStatus: mcEndpoint =', mcEndpoint.toString());
+    console.debug('[motley_cue] getUserStatus: final URL =', url.toString());
 
 	const response = await fetch(url, {
 		headers: {
@@ -137,13 +137,22 @@ export const getUserStatus = async (fetch: Fetch, mcEndpoint: URL, accessToken: 
 };
 
 export const getSshUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
+    console.debug('[motley_cue] getSshUser: mcEndpoint =', mcEndpoint.toString());
+    console.debug('[motley_cue] getSshUser: mcEndpoint.hostname =', mcEndpoint.hostname);
+    console.debug('[motley_cue] getSshUser: mcEndpoint.port =', mcEndpoint.port);
+    console.debug('[motley_cue] getSshUser: mcEndpoint.pathname =', mcEndpoint.pathname);
 	let status = await getUserStatus(fetch, mcEndpoint, accessToken);
+    console.debug('[motley_cue] getSshUser: status =', JSON.stringify(status));
+
 	if (status.state === 'not_deployed') {
 		let deployment = await deployUser(fetch, mcEndpoint, accessToken);
+        console.debug('[motley_cue] getSshUser: deployment =', JSON.stringify(deployment));
 		if (deployment.state === 'deployed') {
 			return { username: deployment.credentials.ssh_user };
 		}
 	} else {
-		return { username: status.message.split(' ')[1] };
+		const username = status.message.split(' ')[1];
+        console.debug('[motley_cue] getSshUser: extracted username =', username);
+		return { username };
 	}
 };
