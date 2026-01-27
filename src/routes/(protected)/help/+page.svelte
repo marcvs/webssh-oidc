@@ -39,9 +39,9 @@
 			$uiBlock = false;
 		}
 		$uiBlock = false;
-		console.log('loginParams:', loginParams);
-		console.log('sshCmd:', sshCmd);
-		console.log('mccliCmd:', mccliCmd);
+        console.log('loginParams:', loginParams);
+        console.log('sshCmd:', sshCmd);
+        console.log('mccliCmd:', mccliCmd);
 	});
 </script>
 
