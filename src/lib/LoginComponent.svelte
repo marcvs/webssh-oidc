@@ -61,41 +61,46 @@
 				defaultSsh = hostSchema.parse(CONFIG.sshHost);
 				sshHost = { ...defaultSsh };
 				validSsh = isValidHost(sshHost);
-				console.debug('[LoginComponent] SSH host configured:', JSON.stringify(sshHost));
+            console.debug('[LoginComponent] SSH host configured:', JSON.stringify(sshHost));
 			} catch (e) {
 				console.error(`Invalid SSH host: ${CONFIG.sshHost}`);
 			}
 
 			try {
-				console.debug('[LoginComponent] Parsing MC endpoint from config:', CONFIG.mcEndpoint);
+                console.debug('[LoginComponent] Parsing MC endpoint from config:', CONFIG.mcEndpoint);
 				defaultMcEndpoint = new URL(CONFIG.mcEndpoint);
-				console.debug('[LoginComponent] Parsed URL:', {
-					href: defaultMcEndpoint.href,
-					hostname: defaultMcEndpoint.hostname,
-					port: defaultMcEndpoint.port,
-					pathname: defaultMcEndpoint.pathname,
-					protocol: defaultMcEndpoint.protocol
-				});
+				// URL API returns empty string for default ports (443 for https, 80 for http)
+				// We need to provide the actual port number for the Host schema
+				const effectivePort = defaultMcEndpoint.port ||
+					(defaultMcEndpoint.protocol === 'https:' ? '443' : '80');
+                console.debug('[LoginComponent]ParsedURL:',{
+                    href:defaultMcEndpoint.href,
+                    hostname:defaultMcEndpoint.hostname,
+                    port:defaultMcEndpoint.port,
+                    effectivePort:effectivePort,
+                    pathname:defaultMcEndpoint.pathname,
+                    protocol:defaultMcEndpoint.protocol
+                });
 				defaultMc = hostSchema.parse({
 					hostname: defaultMcEndpoint.hostname,
-					port: defaultMcEndpoint.port,
+					port: effectivePort,
 					protocol: defaultMcEndpoint.protocol.substring(0, defaultMcEndpoint.protocol.length - 1)
 				});
 				mcHost = { ...defaultMc };
 				validMc = isValidHost(mcHost);
 				// Keep the full URL including pathname for the endpoint
 				mcEndpoint = defaultMcEndpoint;
-				console.debug('[LoginComponent] mcEndpoint set to:', mcEndpoint.toString());
+                console.debug('[LoginComponent]mcEndpoint:', {mcEndpoint: mcEndpoint,});
 			} catch (e) {
 				console.error(`Invalid Motley Cue API endpoint: ${CONFIG.mcEndpoint}`, e);
 			}
+            console.debug('[LoginComponent] Loading OPs from:', mcEndpoint?.toString());
 
-			console.debug('[LoginComponent] Loading OPs from:', mcEndpoint?.toString());
 			defaultOps = await loadOpsWrapper(fetch, mcEndpoint);
-			console.debug('[LoginComponent] Loaded OPs:', defaultOps);
+            console.debug('[LoginComponent] Loaded OPs:', defaultOps);
 			supportedOps = [...defaultOps];
 			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value));
-			console.debug('[LoginComponent] Filtered OPs:', filteredOps);
+            console.debug('[LoginComponent] Filtered OPs:', filteredOps);
 			
 			// Handle IdP hinting
 			handleIdpHint();
@@ -153,25 +158,25 @@
 
 		// Construct URL with proper ordering: protocol://hostname:port/path
 		const url = new URL(`${host.protocol}://${hostname}:${host.port}${pathname}`);
-		console.debug('[LoginComponent] buildMcEndpointUrl: input hostname =', host.hostname);
-		console.debug('[LoginComponent] buildMcEndpointUrl: parsed hostname =', hostname);
-		console.debug('[LoginComponent] buildMcEndpointUrl: parsed pathname =', pathname);
-		console.debug('[LoginComponent] buildMcEndpointUrl: result =', url.toString());
+        console.debug('[LoginComponent] buildMcEndpointUrl: input hostname =', host.hostname);
+        console.debug('[LoginComponent] buildMcEndpointUrl: parsed hostname =', hostname);
+        console.debug('[LoginComponent] buildMcEndpointUrl: parsed pathname =', pathname);
+        console.debug('[LoginComponent] buildMcEndpointUrl: result =', url.toString());
 		return url;
 	};
 
 	const reloadOPs = async ({ detail }: CustomEvent<Host>) => {
 		mcHost = { ...detail };
-		console.debug('[LoginComponent] reloadOPs: mcHost =', JSON.stringify(mcHost));
+        console.debug('[LoginComponent] reloadOPs: mcHost =', JSON.stringify(mcHost));
 		mcEndpoint = buildMcEndpointUrl(mcHost);
-		console.debug('[LoginComponent] reloadOPs: constructed mcEndpoint =', mcEndpoint.toString());
+        console.debug('[LoginComponent] reloadOPs: constructed mcEndpoint =', mcEndpoint.toString());
 		validMc = false;
 
 		// for the default motley_cue server, use the pre-loaded OPs
 		if (JSON.stringify(mcHost) === JSON.stringify(defaultMc)) {
 			// Use the original defaultMcEndpoint which preserves the pathname
 			mcEndpoint = defaultMcEndpoint;
-			console.debug('[LoginComponent] reloadOPs: using defaultMcEndpoint =', mcEndpoint.toString());
+            console.debug('[LoginComponent] reloadOPs: using defaultMcEndpoint =', mcEndpoint.toString());
 			supportedOps = defaultOps;
 			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value));
 			validMc = true;
@@ -181,7 +186,7 @@
 		// for other motley_cue servers, load the OPs from the server
 		try {
 			$uiBlock = true;
-			console.debug('[LoginComponent] reloadOPs: fetching OPs from', mcEndpoint.toString());
+            console.debug('[LoginComponent] reloadOPs: fetching OPs from', mcEndpoint.toString());
 			supportedOps = await loadOpsWrapper(fetch, mcEndpoint);
 			if (!supportedOps || !supportedOps.length) {
 				throw new Error('No supported OPs');
@@ -225,7 +230,7 @@
 		
 		// Check if the hint matches any of our supported OPs
 		if (!filteredOps || !filteredOps.includes(idpHint)) {
-			console.log(`IdP hint "${idpHint}" not found in supported OPs:`, filteredOps);
+            console.log(`IdP hint "${idpHint}" not found in supported OPs:`, filteredOps);
 			return;
 		}
 		
@@ -253,19 +258,19 @@
 	const handleLogin = async () => {
 		try {
 			$uiBlock = true;
-			console.debug('[LoginComponent] handleLogin: starting login flow');
-			console.debug('[LoginComponent] handleLogin: selectedOp =', selectedOp);
-			console.debug('[LoginComponent] handleLogin: mcEndpoint =', mcEndpoint.toString());
-			console.debug('[LoginComponent] handleLogin: sshHost =', JSON.stringify(sshHost));
+            console.debug('[LoginComponent] handleLogin: starting login flow');
+            console.debug('[LoginComponent] handleLogin: selectedOp =', selectedOp);
+            console.debug('[LoginComponent] handleLogin: mcEndpoint =', mcEndpoint.toString());
+            console.debug('[LoginComponent] handleLogin: sshHost =', JSON.stringify(sshHost));
 
 			if (!selectedOp || !isKeyOf(selectedOp, providers)) {
 				throw new Error('Invalid OIDC provider');
 			}
 
 			let op = providers[selectedOp];
-			console.debug('[LoginComponent] handleLogin: fetching OP info for', selectedOp);
+            console.debug('[LoginComponent] handleLogin: fetching OP info for', selectedOp);
 			let opInfo = await loadOpInfo(fetch, mcEndpoint, selectedOp);
-			console.debug('[LoginComponent] handleLogin: opInfo =', JSON.stringify(opInfo));
+            console.debug('[LoginComponent] handleLogin: opInfo =', JSON.stringify(opInfo));
 			let callbackUrl =
 				'/redir' +
 				'?mcEndpoint=' +
@@ -274,7 +279,7 @@
 				encodeURIComponent(sshHost.hostname) +
 				'&sshPort=' +
 				sshHost.port.toString();
-			console.debug('[LoginComponent] handleLogin: callbackUrl =', callbackUrl);
+            console.debug('[LoginComponent] handleLogin: callbackUrl =', callbackUrl);
 			await signIn(op.id, { callbackUrl: callbackUrl }, { scope: opInfo.scopes.join(' ') });
 		} catch (e) {
 			$uiBlock = false;
