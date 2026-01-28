@@ -54,6 +54,13 @@ List of supported providers and their corresponding ids:
 - `helmholtz` for `https://login.helmholtz.de/oauth2`
 - `helmholtz-dev` for `https://login-dev.helmholtz.de/oauth2`
 - `deep-hdc` for `https://iam.deep-hybrid-datacloud.eu`
+- `kit` for `https://oidc.scc.kit.edu/auth/realms/kit`
+- `eduteams` for `https://proxy.eduteams.org`
+- `didmos` for `https://auth.didmos.nfdi-aai.de`
+- `fels` for https://fels.scc.kit.edu/oidc/realms/fels`
+- `myaccessid` for `https://proxy.myaccessid.org`
+<!-- https://keycloak.sso.gwdg.de/auth/realms/academiccloud -->
+<!-- https://login.aai.lifescience-ri.eu/oidc -->
 
 You can then spin up a container with:
 
