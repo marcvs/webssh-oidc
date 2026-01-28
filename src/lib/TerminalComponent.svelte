@@ -89,7 +89,6 @@
 				if (timeout) clearTimeout(timeout);
 			};
 			ws.onclose = (ev: CloseEvent) => {
-                console.log('[TerminalComponent] WebSocket closed:', { code: ev.code, reason: ev.reason, wasClean:
 				if (ev.code !== 1000) {
 					// 1000 = normal close (https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
 					$errorMessage = ev.reason || `WebSocket closed with code ${ev.code}`;
