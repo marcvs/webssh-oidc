@@ -4,6 +4,7 @@ import { handler } from './build/handler.js';
 import { NodeSSH } from 'node-ssh';
 import express from 'express';
 import ews from 'express-ws';
+import logger from './logger.js';
 
 const port = process.env.WS_PORT || 8444;
 
@@ -19,13 +20,13 @@ const CLOSE_REASON = {
 };
 
 router.ws('/connect', async function (ws, req) {
-    console.log('[server.js] WebSocket /connect request received');
+    logger.debug('[server.js] WebSocket /connect request received');
 	const accessToken = req.headers['sec-websocket-protocol'];
 	const sshHostname = req.query.sshHostname?.toString();
 	const sshPort = Number(req.query.sshPort?.toString());
 	const username = req.query.username?.toString();
 
-    console.log('[server.js] Connection params:', {
+    logger.debug('[server.js] Connection params:', {
       hasAccessToken: !!accessToken,
       sshHostname,
       sshPort,
@@ -33,28 +34,28 @@ router.ws('/connect', async function (ws, req) {
     });
 
 	if (!accessToken) {
-		console.error('[server.js] Missing access token');
+		logger.error('[server.js] Missing access token');
 		ws.close(CLOSE_REASON.error.code, "Missing 'sec-websocket-protocol' header");
 		return;
 	}
 	if (!sshHostname) {
-		console.error('[server.js] Missing sshHostname');
+		logger.error('[server.js] Missing sshHostname');
 		ws.close(CLOSE_REASON.error.code, "Missing 'sshHostname' query parameter");
 		return;
 	}
 	if (!sshPort) {
-		console.error('[server.js] Missing sshPort');
+		logger.error('[server.js] Missing sshPort');
 		ws.close(CLOSE_REASON.error.code, "Missing 'sshPort' query parameter");
 		return;
 	}
 	if (!username) {
-		console.error('[server.js] Missing username');
+		logger.error('[server.js] Missing username');
 		ws.close(CLOSE_REASON.error.code, "Missing 'username' query parameter");
 		return;
 	}
 
 
-    console.log(`[server.js] Attempting SSH connection to ${username}@${sshHostname}:${sshPort}`);
+    logger.debug(`[server.js] Attempting SSH connection to ${username}@${sshHostname}:${sshPort}`);
 
 	const ssh = new NodeSSH();
 	const sshConnection = await ssh
@@ -64,42 +65,42 @@ router.ws('/connect', async function (ws, req) {
 			username: username,
 			tryKeyboard: true,
 			onKeyboardInteractive: (name, instructions, instructionsLang, prompts, finish) => {
-                console.log('[server.js] Keyboard interactive auth:', { name, prompts: prompts.map(p => p.prompt) });
+                logger.debug('[server.js] Keyboard interactive auth:', { name, prompts: prompts.map(p => p.prompt) });
 				if (prompts.length > 0 && prompts[0].prompt.includes('Access Token')) {
-                    console.log('[server.js] Providing access token for authentication');
+                    logger.debug('[server.js] Providing access token for authentication');
 					finish([accessToken]);
 				}
 			}
 		})
 		.catch((err) => {
-			console.error('[server.js] SSH connection failed:', err.message);
+			logger.error('[server.js] SSH connection failed:', err.message);
 			ws.close(CLOSE_REASON.error.code, `Failed to connect to SSH server: ${err.message}`);
 			return null;
 		});
 
 	if (!sshConnection) {
-		console.error('[server.js] SSH connection is null, aborting');
+		logger.error('[server.js] SSH connection is null, aborting');
 		return;
 	}
 
-	console.log('[server.js] SSH connected successfully, requesting shell...');
+	logger.debug('[server.js] SSH connected successfully, requesting shell...');
 
 	const channel = await sshConnection
 		.requestShell({
 			term: 'xterm-256color'
 		})
 		.catch((err) => {
-			console.error('[server.js] Failed to open shell:', err.message);
+			logger.error('[server.js] Failed to open shell:', err.message);
 			ws.close(CLOSE_REASON.error.code, `Failed to open shell: ${err.message}`);
 			return null;
 		});
 
 	if (!channel) {
-		console.error('[server.js] Shell channel is null, aborting');
+		logger.error('[server.js] Shell channel is null, aborting');
 		return;
 	}
 
-	console.log('[server.js] Shell opened successfully');
+	logger.debug('[server.js] Shell opened successfully');
 
 	channel.addListener('data', (data) => {
 		ws.send(data.toString('utf8'));
@@ -123,17 +124,16 @@ router.ws('/connect', async function (ws, req) {
 		if (channel.writable) {
 			channel.write(msg);
 		} else {
-			console.warn('Channel not writable. Message dismissed: ', msg);
+			logger.warn('Channel not writable. Message dismissed: ', msg);
 		}
 	});
 
 	ws.on('close', () => {
-		// console.log('out.');
 		try {
 			channel.close();
 			sshConnection.dispose();
 		} catch (_) {
-			console.warn('some oopsie happened.');
+			logger.warn('some oopsie happened.');
 		}
 	});
 });
@@ -143,7 +143,7 @@ app.use('/ws', router);
 app.use(handler);
 
 app.listen(port, async () => {
-	console.log(`Started server on port ${port}.`);
+	logger.info(`Started server on port ${port}.`);
 });
 
 export { app };

@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: runner
+      args:
+        VITE_LOG_LEVEL: info  # Build-time: Controls client-side (browser) logging
     # image: webssh-oidc
     restart: on-failure
     ports:
@@ -14,5 +16,6 @@ services:
     # set NODE_ENV to production or development, depending on whether you're running in production with ssl or not
     environment:
       - NODE_ENV=production
+      # - LOG_LEVEL=info  # Runtime: Controls server-side logging (uncomment to set)
     env_file:
       - .env

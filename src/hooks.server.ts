@@ -5,6 +5,7 @@ import { handle as skauth } from '$lib/server/auth';
 
 import { getUserSession } from '$lib/server/sessions';
 import type { RequestEvent } from '@sveltejs/kit';
+import logger from '$lib/server/logger';
 
 function isLoggedIn({ locals: { session } }: RequestEvent) {
 	if (session && session.accessToken) {
@@ -29,7 +30,7 @@ const authcheck = (async ({ event, resolve }) => {
 	}
 
 	if (event.route.id?.startsWith('/(public)/login') && isLoggedIn(event)) {
-        console.debug('User already logged in. Redirecting to terminal...');
+        logger.debug('User already logged in. Redirecting to terminal...');
 		return redirect(302, '/terminal');
 	}
 

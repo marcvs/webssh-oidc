@@ -7,6 +7,7 @@
 	import type { Terminal } from '$lib/terminal';
 	import { signOut } from '@auth/sveltekit/client';
 	import type { TerminalSessionInfo } from '$lib/server/sessions';
+	import logger from '$lib/clientLogger';
 
 	export let sessionInfo: TerminalSessionInfo;
 	export let loginParams: {
@@ -50,14 +51,14 @@
 	}
 
 	onMount(async () => {
-        console.debug('[TerminalComponent] onMount: loginParams =', JSON.stringify(loginParams, null, 2));
+        logger.debug('[TerminalComponent] onMount: loginParams =', JSON.stringify(loginParams, null, 2));
 		if (!loginParams || !loginParams.accessToken) {
 			$errorMessage = 'Please log in again.';
 			await signOut();
 		}
 
 		if (!loginParams.sshUser) {
-			console.error('[TerminalComponent] No SSH username provided!');
+			logger.error('[TerminalComponent] No SSH username provided!');
 			$errorMessage = 'No SSH username - motley_cue connection may have failed.';
 			return;
 		}
@@ -67,8 +68,8 @@
 		wsConnectUrl.searchParams.set('sshHostname', loginParams.sshHost.hostname);
 		wsConnectUrl.searchParams.set('sshPort', loginParams.sshHost.port.toString());
 		wsConnectUrl.searchParams.set('username', loginParams.sshUser);
-        console.log('[TerminalComponent] WebSocket URL:', wsConnectUrl.toString());
-        console.log('[TerminalComponent] Creating WebSocket connection...');
+        logger.debug('[TerminalComponent] WebSocket URL:', wsConnectUrl.toString());
+        logger.debug('[TerminalComponent] Creating WebSocket connection...');
 
 		if (termDiv) {
 			term = new libterm.Terminal(termDiv);
@@ -76,16 +77,16 @@
 			let ws: WebSocket;
 			try {
 				ws = new WebSocket(wsConnectUrl, loginParams.accessToken);
-                console.log('[TerminalComponent] WebSocket created, readyState:', ws.readyState);
+                logger.debug('[TerminalComponent] WebSocket created, readyState:', ws.readyState);
 			} catch (err) {
-				console.error('[TerminalComponent] WebSocket creation failed:', err);
+				logger.error('[TerminalComponent] WebSocket creation failed:', err);
 				$errorMessage = `WebSocket creation failed: ${err}`;
 				return;
 			}
 
 			let timeout: NodeJS.Timeout | undefined = undefined;
 			ws.onopen = () => {
-                console.log('[TerminalComponent] WebSocket opened successfully');
+                logger.debug('[TerminalComponent] WebSocket opened successfully');
 				if (timeout) clearTimeout(timeout);
 			};
 			ws.onclose = (ev: CloseEvent) => {
@@ -99,7 +100,7 @@
 				}, 500);
 			};
 			ws.onerror = async (ev: Event) => {
-				console.error('[TerminalComponent] WebSocket error:', ev);
+				logger.error('[TerminalComponent] WebSocket error:', ev);
 				$errorMessage = 'Could not connect to SSH server.';
 				// await signOut();
 				closeTerminal();

@@ -5,9 +5,13 @@ WORKDIR /app
 
 # RUN apt update && apt -y install iputils-ping net-tools netcat-openbsd httpie curl
 
+# Accept build argument for client-side log level
+ARG VITE_LOG_LEVEL=info
+
 COPY . /app
 RUN npm install
-RUN npm run build
+# Pass VITE_LOG_LEVEL to the build process
+RUN VITE_LOG_LEVEL=${VITE_LOG_LEVEL} npm run build
 
 
 
@@ -25,6 +29,7 @@ RUN npm ci --only=production
 
 COPY --from=builder /app/build /app/build
 COPY server.js /app/server.js
+COPY logger.js /app/logger.js
 
 EXPOSE 8444
 

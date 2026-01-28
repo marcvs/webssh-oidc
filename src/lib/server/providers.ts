@@ -33,7 +33,6 @@ function loadProvider(provider_config: ProviderConfig) {
 		.trim() // remove leading and trailing whitespace
 		.replace(/\/+$/, ''); // remove trailing slashes
     logger.debug(`Issuer: ${issuer}`);
-    console.log(`Issuer: ${issuer}`); // temp test
 	switch (issuer) {
 		case 'https://accounts.google.com':
 			return Google(auth);
@@ -61,9 +60,8 @@ function loadProvider(provider_config: ProviderConfig) {
         //     // return KIT(auth);
         //     return Generic(provider_config);
 		default:
-			console.log(`Issuer ${issuer} supported via generic provider.`);
+			logger.debug(`Issuer ${issuer} supported via generic provider.`);
             return Generic(provider_config);
-			// return Generic(auth);
 	}
 }
 
