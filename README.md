@@ -3,10 +3,12 @@
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
-npm run dev
+Terminal 1: npm run dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+Terminal 1: npm run dev -- --open
+
+Terminal 2: npm run dev:ws (WebSocket server on port 8445)                                                                        
 ```
 
 ## Building
@@ -52,6 +54,13 @@ List of supported providers and their corresponding ids:
 - `helmholtz` for `https://login.helmholtz.de/oauth2`
 - `helmholtz-dev` for `https://login-dev.helmholtz.de/oauth2`
 - `deep-hdc` for `https://iam.deep-hybrid-datacloud.eu`
+- `kit` for `https://oidc.scc.kit.edu/auth/realms/kit`
+- `eduteams` for `https://proxy.eduteams.org`
+- `didmos` for `https://auth.didmos.nfdi-aai.de`
+- `fels` for https://fels.scc.kit.edu/oidc/realms/fels`
+- `myaccessid` for `https://proxy.myaccessid.org`
+<!-- https://keycloak.sso.gwdg.de/auth/realms/academiccloud -->
+<!-- https://login.aai.lifescience-ri.eu/oidc -->
 
 You can then spin up a container with:
 

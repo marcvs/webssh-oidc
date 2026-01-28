@@ -1,12 +1,29 @@
 import { z } from 'zod';
+import logger from '$lib/clientLogger';
 
 type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>;
 
 const ABORT_TIMEOUT = 10000;
 
+/**
+ * Safely append a path segment to a URL, ensuring proper slash handling.
+ * Handles cases where base path may or may not have a trailing slash.
+ */
+const appendPath = (baseUrl: URL, path: string): URL => {
+	const url = new URL(baseUrl);
+	// Ensure base pathname ends with / before appending
+	if (!url.pathname.endsWith('/')) {
+		url.pathname += '/';
+	}
+	// Remove leading slash from path if present
+	url.pathname += path.replace(/^\//, '');
+	return url;
+};
+
 export const loadOps = async (fetch: Fetch, mcEndpoint: URL) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'info';
+	const url = appendPath(mcEndpoint, 'info');
+    logger.debug('[motley_cue] loadOps: mcEndpoint =', mcEndpoint.toString());
+    logger.debug('[motley_cue] loadOps: final URL =', url.toString());
 
 	const response = await fetch(url, { signal: AbortSignal.timeout(ABORT_TIMEOUT) });
 	if (response.ok) {
@@ -29,9 +46,10 @@ export const loadOps = async (fetch: Fetch, mcEndpoint: URL) => {
 };
 
 export const loadOpInfo = async (fetch: Fetch, mcEndpoint: URL, opUrl: string) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'info/op';
+	const url = appendPath(mcEndpoint, 'info/op');
 	url.searchParams.set('url', opUrl);
+    logger.debug('[motley_cue] loadOpInfo: mcEndpoint =', mcEndpoint.toString());
+    logger.debug('[motley_cue] loadOpInfo: final URL =', url.toString());
 
 	const response = await fetch(url, { signal: AbortSignal.timeout(ABORT_TIMEOUT) });
 	if (response.ok) {
@@ -56,8 +74,9 @@ export const loadOpInfo = async (fetch: Fetch, mcEndpoint: URL, opUrl: string) =
 };
 
 export const deployUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'user/deploy';
+	const url = appendPath(mcEndpoint, 'user/deploy');
+    logger.debug('[motley_cue] deployUser: mcEndpoint =', mcEndpoint.toString());
+    logger.debug('[motley_cue] deployUser: final URL =', url.toString());
 
 	const response = await fetch(url, {
 		headers: {
@@ -88,8 +107,9 @@ export const deployUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: str
 };
 
 export const getUserStatus = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
-	const url = new URL(mcEndpoint);
-	url.pathname += 'user/get_status';
+	const url = appendPath(mcEndpoint, 'user/get_status');
+    logger.debug('[motley_cue] getUserStatus: mcEndpoint =', mcEndpoint.toString());
+    logger.debug('[motley_cue] getUserStatus: final URL =', url.toString());
 
 	const response = await fetch(url, {
 		headers: {
@@ -118,13 +138,22 @@ export const getUserStatus = async (fetch: Fetch, mcEndpoint: URL, accessToken: 
 };
 
 export const getSshUser = async (fetch: Fetch, mcEndpoint: URL, accessToken: string) => {
+    logger.debug('[motley_cue] getSshUser: mcEndpoint =', mcEndpoint.toString());
+    logger.debug('[motley_cue] getSshUser: mcEndpoint.hostname =', mcEndpoint.hostname);
+    logger.debug('[motley_cue] getSshUser: mcEndpoint.port =', mcEndpoint.port);
+    logger.debug('[motley_cue] getSshUser: mcEndpoint.pathname =', mcEndpoint.pathname);
 	let status = await getUserStatus(fetch, mcEndpoint, accessToken);
+    logger.debug('[motley_cue] getSshUser: status =', JSON.stringify(status));
+
 	if (status.state === 'not_deployed') {
 		let deployment = await deployUser(fetch, mcEndpoint, accessToken);
+        logger.debug('[motley_cue] getSshUser: deployment =', JSON.stringify(deployment));
 		if (deployment.state === 'deployed') {
 			return { username: deployment.credentials.ssh_user };
 		}
 	} else {
-		return { username: status.message.split(' ')[1] };
+		const username = status.message.split(' ')[1];
+        logger.debug('[motley_cue] getSshUser: extracted username =', username);
+		return { username };
 	}
 };

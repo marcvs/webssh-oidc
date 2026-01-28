@@ -6,7 +6,7 @@ import providers from '$lib/server/providers';
 // hook for auth.js oidc authentication
 export const { handle, signIn, signOut } = SvelteKitAuth({
 	trustHost: true,
-	useSecureCookies: process.env.NODE_ENV === 'production',
+    useSecureCookies: process.env.NODE_ENV === 'production',
 	providers: providers,
 	callbacks: {
 		async jwt({ token, account, user, profile }) {

@@ -12,14 +12,14 @@
 	let expand = false;
 
 	const handleLogout = async () => {
-		console.log('signing out ...');
+        console.log('signing out ...');
 		try {
 			$uiBlock = true;
 			signOut().then(() => {
-				console.log('sign out successful');
-				// console.log('loginParams', $loginParams);
-				console.log('session', $page.data.session);
-				// $loginParams = null;
+                console.log('sign out successful');
+                // console.log('loginParams', $loginParams);
+                console.log('session', $page.data.session);
+                // $loginParams = null;
 				$page.data.session = null;
 			});
 		} catch {

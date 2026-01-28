@@ -1,0 +1,17 @@
+[Unit]
+Description=webssh-oidc
+Before=nginx.service
+
+[Service]
+User=root
+Group=root
+RuntimeDirectory=alise
+WorkingDirectory=/usr/lib/webssh-oidc/
+EnvironmentFile=/etc/webssh-oidc/environment
+ExecStart=node server.js
+# motley_cue.api:api -k "uvicorn.workers.UvicornWorker" --config /usr/lib/motley-cue/etc/gunicorn/gunicorn.conf.py
+ExecReload=/bin/kill -s HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+

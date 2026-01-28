@@ -1,0 +1,21 @@
+# These configurations are all registered with redirect URIs to
+# http://localhost:8444/auth/callback/<provider-name>
+# and 
+# http://hpc.example.org:8444/auth/callback/<provider-name>
+# 
+# For running this service on a public webserver, you MUST register an
+# OAuth2 client with all the OPs that you want to support
+
+providers:
+  - issuer: https://accounts.google.com
+    clientId:  633995513993-rd6e365ntm6p9jv88n93us599kpddm9u.apps.googleusercontent.com
+    clientSecret: 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
+  - issuer: https://login.helmholtz.de/oauth2
+    clientId: public-webssh
+    clientSecret: public-password
+  - issuer: https://login-dev.helmholtz.de/oauth2
+    clientId: public-webssh
+    clientSecret: public-webssh
+  - issuer: https://aai.egi.eu
+    clientId: public-webssh
+    clientSecret: public-webssh

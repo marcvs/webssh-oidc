@@ -1,0 +1,103 @@
+---
+include:
+  - "https://codebase.helmholtz.cloud/m-team/tools/ci-voodoo/raw/master/ci-include/pipeline-jobs-publish-to-repo.yml"
+
+variables:
+  USE_GORELEASER: "true"
+
+image: marcvs/build_generic_debian-trixie:latest
+
+stages:
+  - build
+  # - test
+  # - lint
+  - package
+  # - integration
+  - publish
+
+default:
+  tags:
+    - linux
+  cache:
+    paths:
+      - .cache
+
+build:
+  stage: build
+  image:
+    name: node:18-buster-slim
+  script:
+    - |
+      npm install
+      npm run build
+      echo "find"
+      find .
+  artifacts:
+    paths:
+      - "build/*"
+
+
+package:
+  stage: package
+  image:
+    name: marcvs/build_generic_debian-trixie:latest
+  services:
+    - docker:dind
+  # only:
+  #   refs:
+  #     - tags
+  #     - prerelease
+  tags:
+    - linux
+  variables:
+    GIT_STRATEGY: clone
+    GIT_DEPTH: 0
+    REPO_HOST: repo.data.kit.edu
+    REPO_USER: cicd
+  before_script:
+    - |
+      echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' > /etc/apt/sources.list.d/goreleaser.list
+      apt update
+      apt-get -y install bash git nfpm gettext-base jq
+  script:
+    - |
+      [[ "$CI_COMMIT_TAG" == "${PREREL_BRANCH_NAME}" ]] && {
+          echo "Running set-prerel-version"
+          .gitlab-ci-scripts/set-prerel-version.sh
+      }
+      [[ "$CI_COMMIT_TAG" != "${PREREL_BRANCH_NAME}" ]] && {
+          [[ "$CI_COMMIT_TAG" != "${CI_DEFAULT_BRANCH}" ]] && {
+              # we're on a devel branch
+              echo "Running set-prerel-version --devstring dev"
+              .gitlab-ci-scripts/set-prerel-version.sh --devstring dev
+          }
+      }
+      .gitlab-ci-scripts/package.sh
+  artifacts:
+    paths:
+      - "results/*"
+
+# test:
+#   stage: test
+#   script:
+#     - go test -v ./...
+#
+# test-race:
+#   stage: test
+#   script:
+#     - go test -race -v ./...
+#
+# staticcheck:
+#   stage: lint
+#   allow_failure: true
+#   before_script:
+#     - go install honnef.co/go/tools/cmd/staticcheck@latest
+#   script:
+#     - staticcheck ./...
+#
+# vet:
+#   stage: lint
+#   allow_failure: true
+#   script:
+#     - go vet ./...
+

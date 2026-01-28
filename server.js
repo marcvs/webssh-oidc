@@ -4,8 +4,9 @@ import { handler } from './build/handler.js';
 import { NodeSSH } from 'node-ssh';
 import express from 'express';
 import ews from 'express-ws';
+import logger from './logger.js';
 
-const port = 8444;
+const port = process.env.WS_PORT || 8444;
 
 const app = express();
 ews(app);
@@ -19,27 +20,42 @@ const CLOSE_REASON = {
 };
 
 router.ws('/connect', async function (ws, req) {
+    logger.debug('[server.js] WebSocket /connect request received');
 	const accessToken = req.headers['sec-websocket-protocol'];
 	const sshHostname = req.query.sshHostname?.toString();
 	const sshPort = Number(req.query.sshPort?.toString());
 	const username = req.query.username?.toString();
 
+    logger.debug('[server.js] Connection params:', {
+      hasAccessToken: !!accessToken,
+      sshHostname,
+      sshPort,
+      username
+    });
+
 	if (!accessToken) {
+		logger.error('[server.js] Missing access token');
 		ws.close(CLOSE_REASON.error.code, "Missing 'sec-websocket-protocol' header");
 		return;
 	}
 	if (!sshHostname) {
+		logger.error('[server.js] Missing sshHostname');
 		ws.close(CLOSE_REASON.error.code, "Missing 'sshHostname' query parameter");
 		return;
 	}
 	if (!sshPort) {
+		logger.error('[server.js] Missing sshPort');
 		ws.close(CLOSE_REASON.error.code, "Missing 'sshPort' query parameter");
 		return;
 	}
 	if (!username) {
+		logger.error('[server.js] Missing username');
 		ws.close(CLOSE_REASON.error.code, "Missing 'username' query parameter");
 		return;
 	}
+
+
+    logger.debug(`[server.js] Attempting SSH connection to ${username}@${sshHostname}:${sshPort}`);
 
 	const ssh = new NodeSSH();
 	const sshConnection = await ssh
@@ -49,33 +65,42 @@ router.ws('/connect', async function (ws, req) {
 			username: username,
 			tryKeyboard: true,
 			onKeyboardInteractive: (name, instructions, instructionsLang, prompts, finish) => {
+                logger.debug('[server.js] Keyboard interactive auth:', { name, prompts: prompts.map(p => p.prompt) });
 				if (prompts.length > 0 && prompts[0].prompt.includes('Access Token')) {
+                    logger.debug('[server.js] Providing access token for authentication');
 					finish([accessToken]);
 				}
 			}
 		})
 		.catch((err) => {
-			console.error(CLOSE_REASON.error.code, 'Failed to connect to SSH server');
-			ws.close(CLOSE_REASON.error.code, 'Failed to connect to SSH server');
+			logger.error('[server.js] SSH connection failed:', err.message);
+			ws.close(CLOSE_REASON.error.code, `Failed to connect to SSH server: ${err.message}`);
 			return null;
 		});
 
-	if (!sshConnection) return;
+	if (!sshConnection) {
+		logger.error('[server.js] SSH connection is null, aborting');
+		return;
+	}
 
-	// console.log('connected.', sshConnection.isConnected());
+	logger.debug('[server.js] SSH connected successfully, requesting shell...');
 
 	const channel = await sshConnection
 		.requestShell({
 			term: 'xterm-256color'
 		})
 		.catch((err) => {
-			console.log(err);
-			ws.close(CLOSE_REASON.error.code, 'Failed to open shell');
+			logger.error('[server.js] Failed to open shell:', err.message);
+			ws.close(CLOSE_REASON.error.code, `Failed to open shell: ${err.message}`);
 			return null;
 		});
 
-	// console.log('shell opened:', channel === null ? 'no' : 'yes');
-	if (!channel) return;
+	if (!channel) {
+		logger.error('[server.js] Shell channel is null, aborting');
+		return;
+	}
+
+	logger.debug('[server.js] Shell opened successfully');
 
 	channel.addListener('data', (data) => {
 		ws.send(data.toString('utf8'));
@@ -99,17 +124,16 @@ router.ws('/connect', async function (ws, req) {
 		if (channel.writable) {
 			channel.write(msg);
 		} else {
-			console.warn('Channel not writable. Message dismissed: ', msg);
+			logger.warn('Channel not writable. Message dismissed: ', msg);
 		}
 	});
 
 	ws.on('close', () => {
-		// console.log('out.');
 		try {
 			channel.close();
 			sshConnection.dispose();
 		} catch (_) {
-			console.warn('some oopsie happened.');
+			logger.warn('some oopsie happened.');
 		}
 	});
 });
@@ -119,7 +143,7 @@ app.use('/ws', router);
 app.use(handler);
 
 app.listen(port, async () => {
-	console.log(`Started server on port ${port}.`);
+	logger.info(`Started server on port ${port}.`);
 });
 
 export { app };
