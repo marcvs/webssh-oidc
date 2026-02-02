@@ -38,7 +38,11 @@ Also add your webssh user to the `docker` group
 
 1. Install dependencies:
     ```
-    npm install
+    npm install --legacy-peer-deps
+
+    # Note: The --legacy-peer-deps parameter is needed because of version
+    # mismatches between Vite 5/Svelte 4 and some dependencies that expect
+    # newer versions.
     ```
 
 1. Build:
