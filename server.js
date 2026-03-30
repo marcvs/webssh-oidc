@@ -5,8 +5,12 @@ import { NodeSSH } from 'node-ssh';
 import express from 'express';
 import ews from 'express-ws';
 import logger from './logger.js';
+import { generateSshKeyPair, fetchOinitCertificate } from './oinit.js';
 
 const port = process.env.WS_PORT || 8444;
+const sshMethod = process.env.SSH_METHOD || 'mccli';
+const oinitBaseUrl = process.env.PUBLIC_OINIT_ENDPOINT_URL;
+const sshHostnameFqdn = process.env.PUBLIC_SSH_HOSTNAME_FQDN;
 
 const app = express();
 ews(app);
@@ -55,28 +59,82 @@ router.ws('/connect', async function (ws, req) {
 	}
 
 
-    logger.debug(`[server.js] Attempting SSH connection to ${username}@${sshHostname}:${sshPort}`);
+    logger.debug(`[server.js] Attempting SSH connection to ${sshHostname}:${sshPort} using method: ${sshMethod}`);
 
 	const ssh = new NodeSSH();
-	const sshConnection = await ssh
-		.connect({
-			host: sshHostname,
-			port: sshPort,
-			username: username,
-			tryKeyboard: true,
-			onKeyboardInteractive: (name, instructions, instructionsLang, prompts, finish) => {
-                logger.debug('[server.js] Keyboard interactive auth:', { name, prompts: prompts.map(p => p.prompt) });
-				if (prompts.length > 0 && prompts[0].prompt.includes('Access Token')) {
-                    logger.debug('[server.js] Providing access token for authentication');
-					finish([accessToken]);
+	let sshConnection;
+
+	if (sshMethod === 'oinit') {
+		// Certificate-based authentication via oinit CA
+		logger.debug('[server.js] Using oinit certificate authentication');
+
+		if (!oinitBaseUrl) {
+			logger.error('[server.js] PUBLIC_OINIT_ENDPOINT_URL not configured');
+			ws.close(CLOSE_REASON.error.code, 'oinit endpoint not configured');
+			return;
+		}
+		if (!sshHostnameFqdn) {
+			logger.error('[server.js] PUBLIC_SSH_HOSTNAME_FQDN not configured');
+			ws.close(CLOSE_REASON.error.code, 'SSH hostname FQDN not configured');
+			return;
+		}
+
+
+		// Construct full oinit CA endpoint URL
+		const oinitEndpoint = `${oinitBaseUrl}/${sshHostnameFqdn}/certificate`;
+
+		// Generate ephemeral SSH key pair
+		const keyPair = generateSshKeyPair();
+		logger.debug('[server.js] Generated ephemeral SSH key pair');
+
+		// Fetch certificate from oinit CA
+		const certificate = await fetchOinitCertificate(accessToken, keyPair.publicKey, oinitEndpoint);
+		if (!certificate) {
+			ws.close(CLOSE_REASON.error.code, 'Failed to obtain SSH certificate from oinit CA');
+			return;
+		}
+
+        logger.debug(`[server.js] privkey: ${keyPair.privateKey}`);
+        logger.debug(`[server.js] certifi: ${certificate}`);
+
+		sshConnection = await ssh
+			.connect({
+				host: sshHostname,
+				port: sshPort,
+				username: 'oinit',
+				privateKey: keyPair.privateKey,
+				certificate: certificate
+			})
+			.catch((err) => {
+				logger.error(`[server.js] SSH connection failed (oinit): ${err.message || err}`);
+				logger.error(`[server.js] Full error: ${JSON.stringify(err, Object.getOwnPropertyNames(err))}`);
+				ws.close(CLOSE_REASON.error.code, `Failed to connect to SSH server: ${err.message}`);
+				return null;
+			});
+	} else {
+		// Default: mccli keyboard-interactive authentication
+		logger.debug('[server.js] Using mccli keyboard-interactive authentication');
+
+		sshConnection = await ssh
+			.connect({
+				host: sshHostname,
+				port: sshPort,
+				username: username,
+				tryKeyboard: true,
+				onKeyboardInteractive: (name, instructions, instructionsLang, prompts, finish) => {
+					logger.debug('[server.js] Keyboard interactive auth:', { name, prompts: prompts.map(p => p.prompt) });
+					if (prompts.length > 0 && prompts[0].prompt.includes('Access Token')) {
+						logger.debug('[server.js] Providing access token for authentication');
+						finish([accessToken]);
+					}
 				}
-			}
-		})
-		.catch((err) => {
-			logger.error('[server.js] SSH connection failed:', err.message);
-			ws.close(CLOSE_REASON.error.code, `Failed to connect to SSH server: ${err.message}`);
-			return null;
-		});
+			})
+			.catch((err) => {
+				logger.error('[server.js] SSH connection failed (mccli):', err.message);
+				ws.close(CLOSE_REASON.error.code, `Failed to connect to SSH server: ${err.message}`);
+				return null;
+			});
+	}
 
 	if (!sshConnection) {
 		logger.error('[server.js] SSH connection is null, aborting');
@@ -143,7 +201,7 @@ app.use('/ws', router);
 app.use(handler);
 
 app.listen(port, async () => {
-	logger.info(`Started server on port ${port}.`);
+	logger.info(`Started server on port ${port}. SSH method: ${sshMethod}`);
 });
 
 export { app };
