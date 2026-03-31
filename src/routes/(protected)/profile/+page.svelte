@@ -34,5 +34,5 @@
 		<br />
 		Your local username is: <span class="font-semibold text-mc-orange">{loginParams.sshUser}</span>.
 	</p>
-	<MyCodeArea label="User info from OIDC provider" id="sshCmd" value={displayInfo} />
+	<MyCodeArea label="User info from OIDC provider" id="sshCmd" open={true} value={displayInfo} />
 </div>
