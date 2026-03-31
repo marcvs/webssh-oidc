@@ -4,44 +4,56 @@
 	export let label: string;
 	export let value: string;
 	export let id: string;
+	export let open: boolean = false;
 
 	let selected = false;
 	let disabled = false;
-	let icon = 'mdi:content-copy';
+	let copyIcon = 'mdi:content-copy';
 
 	const copyToClipboard = (e: Event) => {
+		e.stopPropagation();
 		if (value) {
 			function copySuccessful() {
 				selected = true;
-				icon = 'mdi:check';
+				copyIcon = 'mdi:check';
 				disabled = true;
 				setTimeout(() => {
-					// clear selection, reset button
 					selected = false;
-					icon = 'mdi:content-copy';
+					copyIcon = 'mdi:content-copy';
 					disabled = false;
 				}, 300);
 			}
 			navigator.clipboard.writeText(value).then(copySuccessful, () => {});
 		}
 	};
+
+	const toggle = () => {
+		open = !open;
+	};
 </script>
 
 <div>
-	<label for={id} class="block font-medium text-mc-gray dark:text-white m-1 px-2.5">
-		{label}
-	</label>
+	<button
+		type="button"
+		on:click={toggle}
+		class="flex items-center justify-between w-full font-medium text-mc-gray dark:text-white m-1 px-2.5 py-1 hover:bg-gray-100 rounded cursor-pointer"
+	>
+		<span>{label}</span>
+		<Icon icon={open ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="inline text-xl" />
+	</button>
 
-	<div class="relative">
-		<span {id} class="textarea" class:selected>{value}</span>
-		<button
-			{disabled}
-			class="absolute top-0 right-0 -translate-y-full m-1 px-4 p-2.5 text-mc-gray rounded opacity-50 hover:opacity-100"
-			on:click|stopPropagation={copyToClipboard}
-		>
-			<Icon {icon} class="inline" />
-		</button>
-	</div>
+	{#if open}
+		<div class="relative">
+			<span {id} class="textarea" class:selected>{value}</span>
+			<button
+				{disabled}
+				class="absolute top-0 right-5 -translate-y-full m-1 px-4 p-2.5 text-mc-gray rounded opacity-50 hover:opacity-100"
+				on:click={copyToClipboard}
+			>
+				<Icon icon={copyIcon} class="inline" />
+			</button>
+		</div>
+	{/if}
 </div>
 
 <style lang="postcss">
