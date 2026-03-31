@@ -13,11 +13,11 @@
 	import { isValidHost, hostSchema, resetHost, type Host, type OP } from '$lib/types';
 	import { loadOpInfo, loadOps } from '$lib/motley_cue';
 	import { errorMessage, uiBlock } from '$lib/stores';
-	import CONFIG from '$lib/config';
 	import { slide } from 'svelte/transition';
 	import logger from '$lib/clientLogger';
 
 	export let providers: Record<string, OP>;
+	export let config: { mcEndpoint: string; sshHost: { hostname: string; port: number } };
 	let advanced: boolean = false;
 
 	// default settings
@@ -60,17 +60,17 @@
 			$uiBlock = true;
 			// load default settings from environment variables or use sane defaults
 			try {
-				defaultSsh = hostSchema.parse(CONFIG.sshHost);
+				defaultSsh = hostSchema.parse(config.sshHost);
 				sshHost = { ...defaultSsh };
 				validSsh = isValidHost(sshHost);
             logger.debug('[LoginComponent] SSH host configured:', JSON.stringify(sshHost));
 			} catch (e) {
-				logger.error(`Invalid SSH host: ${CONFIG.sshHost}`);
+				logger.error(`Invalid SSH host: ${config.sshHost}`);
 			}
 
 			try {
-                logger.debug('[LoginComponent] Parsing MC endpoint from config:', CONFIG.mcEndpoint);
-				defaultMcEndpoint = new URL(CONFIG.mcEndpoint);
+                logger.debug('[LoginComponent] Parsing MC endpoint from config:', config.mcEndpoint);
+				defaultMcEndpoint = new URL(config.mcEndpoint);
 				// URL API returns empty string for default ports (443 for https, 80 for http)
 				// We need to provide the actual port number for the Host schema
 				const effectivePort = defaultMcEndpoint.port ||
@@ -94,7 +94,7 @@
 				mcEndpoint = defaultMcEndpoint;
                 logger.debug('[LoginComponent]mcEndpoint:', {mcEndpoint: mcEndpoint,});
 			} catch (e) {
-				logger.error(`Invalid Motley Cue API endpoint: ${CONFIG.mcEndpoint}`, e);
+				logger.error(`Invalid Motley Cue API endpoint: ${config.mcEndpoint}`, e);
 			}
             logger.debug('[LoginComponent] Loading OPs from:', mcEndpoint?.toString());
 
@@ -113,7 +113,7 @@
 			defaultMc = { ...resetHost };
 			mcHost = { ...resetHost };
 			validMc = false;
-			$errorMessage = `Cannot connect to motley-cue server at ${mcEndpoint?.toString() ?? CONFIG.mcEndpoint}. Error: ${errorDetail}`;
+			$errorMessage = `Cannot connect to motley-cue server at ${mcEndpoint?.toString() ?? config.mcEndpoint}. Error: ${errorDetail}`;
 		} finally {
 			$uiBlock = false;
 		}

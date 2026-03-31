@@ -9,9 +9,9 @@ import { generateSshKeyPair, fetchOinitCertificate } from './oinit.js';
 
 const port = process.env.WS_PORT || 8444;
 const sshMethod = process.env.SSH_METHOD || 'mccli';
-const oinitBaseUrl = process.env.PUBLIC_OINIT_ENDPOINT_URL;
-const sshHostnameFqdn = process.env.PUBLIC_SSH_HOSTNAME_FQDN;
-const sshCertHostnameFqdn = process.env.PUBLIC_OINIT_CERT_SSH_HOSTNAME_FQDN;
+const oinitEndpoint = process.env.OINIT_ENDPOINT;
+const sshHostname = process.env.SSH_HOSTNAME;
+const sshCertHostname = process.env.SSH_CERT_HOSTNAME;
 
 const app = express();
 ews(app);
@@ -85,19 +85,19 @@ router.ws('/connect', async function (ws, req) {
 			// Fallback: generate new credentials (shouldn't happen normally)
 			logger.warn('[server.js] No oinit credentials in request, generating new ones');
 
-			if (!oinitBaseUrl) {
-				logger.error('[server.js] PUBLIC_OINIT_ENDPOINT_URL not configured');
+			if (!oinitEndpoint) {
+				logger.error('[server.js] OINIT_ENDPOINT not configured');
 				ws.close(CLOSE_REASON.error.code, 'oinit endpoint not configured');
 				return;
 			}
 
-			const oinitEndpoint = `${oinitBaseUrl}/${sshCertHostnameFqdn || sshHostnameFqdn}/certificate`;
-			logger.debug(`[server.js] oinitEndpoint ${oinitEndpoint}`);
+			const oinitCertUrl = `${oinitEndpoint}/${sshCertHostname || sshHostname}/certificate`;
+			logger.debug(`[server.js] oinitCertUrl ${oinitCertUrl}`);
 
 			const keyPair = generateSshKeyPair();
 			logger.debug('[server.js] Generated ephemeral SSH key pair');
 
-			certificate = await fetchOinitCertificate(accessToken, keyPair.publicKey, oinitEndpoint);
+			certificate = await fetchOinitCertificate(accessToken, keyPair.publicKey, oinitCertUrl);
 			if (!certificate) {
 				ws.close(CLOSE_REASON.error.code, 'Failed to obtain SSH certificate from oinit CA');
 				return;

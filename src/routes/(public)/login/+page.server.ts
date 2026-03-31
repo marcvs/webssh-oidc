@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
 import providers from '$lib/server/providers';
 import type { OP } from '$lib/types';
+import CONFIG from '$lib/config';
 
 export const load = (async () => {
 	const providerMap: { [issuer: string]: OP } = providers.reduce(
@@ -17,6 +18,10 @@ export const load = (async () => {
 	);
 
 	return {
-		providers: providerMap
+		providers: providerMap,
+		config: {
+			mcEndpoint: CONFIG.mcEndpoint,
+			sshHost: CONFIG.sshHost
+		}
 	};
 }) satisfies PageServerLoad;
