@@ -7,7 +7,7 @@ import logger from './logger.js';
  */
 export function generateSshKeyPair() {
 	const key = sshpk.generatePrivateKey('ed25519');
-	logger.debug('[oinit] Generated ephemeral ed25519 key pair');
+	logger.debug('[oinit.js] Generated ephemeral ed25519 key pair');
 	return {
 		privateKey: key.toString('openssh'),
 		publicKey: key.toPublic().toString('ssh')
@@ -29,7 +29,7 @@ export async function fetchOinitCertificate(accessToken, publicKey, endpoint) {
 		Token: accessToken
 	};
 
-	logger.debug(`[oinit] Calling oinit CA endpoint: ${normalizedEndpoint}`);
+	logger.debug(`[oinit.js] Calling oinit CA endpoint: ${normalizedEndpoint}`);
 
 	const response = await fetch(normalizedEndpoint, {
 		method: 'POST',
@@ -41,11 +41,11 @@ export async function fetchOinitCertificate(accessToken, publicKey, endpoint) {
 
 	if (!response.ok) {
 		const errorText = await response.text();
-		logger.error(`[oinit] CA request failed: status=${response.status} body=${errorText}`);
+		logger.error(`[oinit.js] CA request failed: status=${response.status} body=${errorText}`);
 		return null;
 	}
 
 	const data = await response.json();
-	logger.debug(`[oinit] CA response received`);
+	logger.debug(`[oinit.js] CA response received`);
 	return data.certificate;
 }
