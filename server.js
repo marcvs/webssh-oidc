@@ -69,42 +69,51 @@ router.ws('/connect', async function (ws, req) {
 		// Certificate-based authentication via oinit CA
 		logger.debug('[server.js] Using oinit certificate authentication');
 
-		if (!oinitBaseUrl) {
-			logger.error('[server.js] PUBLIC_OINIT_ENDPOINT_URL not configured');
-			ws.close(CLOSE_REASON.error.code, 'oinit endpoint not configured');
-			return;
+		// Try to get credentials from query params (passed from SvelteKit)
+		const oinitPrivateKeyB64 = req.query.oinitPrivateKey?.toString();
+		const oinitCertificateB64 = req.query.oinitCertificate?.toString();
+
+		let privateKey;
+		let certificate;
+
+		if (oinitPrivateKeyB64 && oinitCertificateB64) {
+			// Use credentials passed from SvelteKit (base64 decode)
+			privateKey = Buffer.from(oinitPrivateKeyB64, 'base64').toString('utf-8');
+			certificate = Buffer.from(oinitCertificateB64, 'base64').toString('utf-8');
+			logger.debug('[server.js] Using oinit credentials from SvelteKit session');
+		} else {
+			// Fallback: generate new credentials (shouldn't happen normally)
+			logger.warn('[server.js] No oinit credentials in request, generating new ones');
+
+			if (!oinitBaseUrl) {
+				logger.error('[server.js] PUBLIC_OINIT_ENDPOINT_URL not configured');
+				ws.close(CLOSE_REASON.error.code, 'oinit endpoint not configured');
+				return;
+			}
+
+			const oinitEndpoint = `${oinitBaseUrl}/${sshCertHostnameFqdn || sshHostnameFqdn}/certificate`;
+			logger.debug(`[server.js] oinitEndpoint ${oinitEndpoint}`);
+
+			const keyPair = generateSshKeyPair();
+			logger.debug('[server.js] Generated ephemeral SSH key pair');
+
+			certificate = await fetchOinitCertificate(accessToken, keyPair.publicKey, oinitEndpoint);
+			if (!certificate) {
+				ws.close(CLOSE_REASON.error.code, 'Failed to obtain SSH certificate from oinit CA');
+				return;
+			}
+			privateKey = keyPair.privateKey;
 		}
-		if (!sshHostnameFqdn) {
-			logger.error('[server.js] PUBLIC_SSH_HOSTNAME_FQDN not configured');
-			ws.close(CLOSE_REASON.error.code, 'SSH hostname FQDN not configured');
-			return;
-		}
 
-
-		// Construct full oinit CA endpoint URL
-		const oinitEndpoint = `${oinitBaseUrl}/${sshCertHostnameFqdn}/certificate`;
-        logger.debug(`[server.js] onitEndpoint ${oinitEndpoint}`);
-
-		// Generate ephemeral SSH key pair
-		const keyPair = generateSshKeyPair();
-		logger.debug('[server.js] Generated ephemeral SSH key pair');
-
-		// Fetch certificate from oinit CA
-		const certificate = await fetchOinitCertificate(accessToken, keyPair.publicKey, oinitEndpoint);
-		if (!certificate) {
-			ws.close(CLOSE_REASON.error.code, 'Failed to obtain SSH certificate from oinit CA');
-			return;
-		}
-
-        logger.debug(`[server.js] privkey: ${keyPair.privateKey}`);
-        logger.debug(`[server.js] certifi: ${certificate}`);
+		logger.debug(`[server.js] privkey: ${privateKey?.substring(0, 50)}...`);
+		logger.debug(`[server.js] certifi: ${certificate?.substring(0, 50)}...`);
 
 		sshConnection = await ssh
 			.connect({
 				host: sshHostname,
 				port: sshPort,
 				username: 'oinit',
-				privateKey: keyPair.privateKey,
+				privateKey: privateKey,
 				certificate: certificate
 			})
 			.catch((err) => {

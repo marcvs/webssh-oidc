@@ -43,7 +43,9 @@
 			port: data.userSession.sshPort
 		},
 		sshUser: data.username,
-		accessToken: data.accessToken
+		accessToken: data.accessToken,
+		oinitPrivateKey: data.oinitPrivateKey,
+		oinitCertificate: data.oinitCertificate
 	};
 
 	let terminals = data.userSession.terminals;
