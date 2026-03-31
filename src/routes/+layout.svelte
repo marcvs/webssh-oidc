@@ -9,14 +9,18 @@
 
 	<div class="absolute bottom-0 left-0 right-0 h-10 text-center text-mc-blue">
 		<p>
-			<a href="/privacy"> Privacy Policy </a> |
-			<a href="https://github.com/dianagudu/webssh-oidc">
+			<a href="/privacy" target="_blank"> Privacy Policy </a>
+            &nbsp;|&nbsp;
+			<a href="https://github.com/dianagudu/webssh-oidc" target="_blank">
 				<Icon icon="mdi:github" class="inline" /> Source
 			</a>
-			|
+            &nbsp;|&nbsp;
 			<a href="mailto:m-contact@lists.kit.edu"
-				><Icon icon="mdi:at" class="inline" /> Developer Contact</a
-			>
+				><Icon icon="mdi:at" class="inline" /> Developer Contact</a>
+            &nbsp;|&nbsp;
+            <a href="https://kit.edu/impressum.php" target="_blank">Imprint</a>
+            &nbsp;|&nbsp;
+            <a href="https://ssh-oidc-doc.data.kit.edu" target="_blank">Documentation</a>
 		</p>
 	</div>
 
