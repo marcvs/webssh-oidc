@@ -28,7 +28,7 @@ build:
     name: node:20-trixie-slim
   script:
     - |
-      apt update && apt -y install git
+      apt update && apt -y install git python3 build-essential
       npm install
       npm run build
       echo "find"
