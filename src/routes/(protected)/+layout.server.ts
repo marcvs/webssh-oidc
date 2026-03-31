@@ -41,7 +41,8 @@ export const load = (async ({ locals }) => {
 	if (CONFIG.oinitEndpoint && !session.oinitPrivateKey) {
 		try {
 			const keyPair = generateSshKeyPair();
-			const endpoint = `${CONFIG.oinitEndpoint}/${session.sshHostname}/certificate`;
+			const certHostname = CONFIG.oinitCertHostname || session.sshHostname;
+			const endpoint = `${CONFIG.oinitEndpoint}/${certHostname}/certificate`;
 			const certificate = await fetchOinitCertificate(
 				locals.session.accessToken,
 				keyPair.publicKey,

@@ -11,6 +11,7 @@ const port = process.env.WS_PORT || 8444;
 const sshMethod = process.env.SSH_METHOD || 'mccli';
 const oinitBaseUrl = process.env.PUBLIC_OINIT_ENDPOINT_URL;
 const sshHostnameFqdn = process.env.PUBLIC_SSH_HOSTNAME_FQDN;
+const sshCertHostnameFqdn = process.env.PUBLIC_OINIT_CERT_SSH_HOSTNAME_FQDN;
 
 const app = express();
 ews(app);
@@ -81,7 +82,8 @@ router.ws('/connect', async function (ws, req) {
 
 
 		// Construct full oinit CA endpoint URL
-		const oinitEndpoint = `${oinitBaseUrl}/${sshHostnameFqdn}/certificate`;
+		const oinitEndpoint = `${oinitBaseUrl}/${sshCertHostnameFqdn}/certificate`;
+        logger.debug(`[server.js] onitEndpoint ${oinitEndpoint}`);
 
 		// Generate ephemeral SSH key pair
 		const keyPair = generateSshKeyPair();
