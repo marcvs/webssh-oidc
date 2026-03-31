@@ -1,5 +1,3 @@
-// @ts-check
-
 import sshpk from 'sshpk';
 import logger from './logger.js';
 
@@ -20,11 +18,10 @@ export function generateSshKeyPair() {
  * Fetch SSH certificate from oinit CA
  * @param {string} accessToken - OIDC access token
  * @param {string} publicKey - SSH public key in OpenSSH format
- * @param {string} endpoint - oinit CA endpoint URL (e.g., http://localhost:8080/oinit/api/v1/localhost/certificate)
+ * @param {string} endpoint - oinit CA endpoint URL
  * @returns {Promise<string | null>} The SSH certificate or null on failure
  */
 export async function fetchOinitCertificate(accessToken, publicKey, endpoint) {
-	// Normalize endpoint URL - remove double slashes (except after protocol)
 	const normalizedEndpoint = endpoint.replace(/([^:]\/)\/+/g, '$1');
 
 	const requestBody = {
@@ -33,7 +30,6 @@ export async function fetchOinitCertificate(accessToken, publicKey, endpoint) {
 	};
 
 	logger.debug(`[oinit] Calling oinit CA endpoint: ${normalizedEndpoint}`);
-	logger.debug(`[oinit] Request body: ${JSON.stringify(requestBody, null, 2)}`);
 
 	const response = await fetch(normalizedEndpoint, {
 		method: 'POST',
@@ -50,7 +46,6 @@ export async function fetchOinitCertificate(accessToken, publicKey, endpoint) {
 	}
 
 	const data = await response.json();
-	// logger.debug(`[oinit] CA response received: ${data.certificate?.substring(0, 80)}...`);
-	logger.debug(`[oinit] CA response received: ${data.certificate}`);
+	logger.debug(`[oinit] CA response received`);
 	return data.certificate;
 }
