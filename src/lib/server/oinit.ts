@@ -6,7 +6,7 @@ import logger from './logger';
  */
 export function generateSshKeyPair(): { privateKey: string; publicKey: string } {
 	const key = sshpk.generatePrivateKey('ed25519');
-	logger.debug('[oinit] Generated ephemeral ed25519 key pair');
+	logger.debug('[oinit.ts] Generated ephemeral ed25519 key pair');
 	return {
 		privateKey: key.toString('openssh'),
 		publicKey: key.toPublic().toString('ssh')
@@ -29,8 +29,8 @@ export async function fetchOinitCertificate(
 		Token: accessToken
 	};
 
-	logger.debug(`[oinit] Calling oinit CA endpoint: ${normalizedEndpoint}`);
-	logger.debug(`[oinit] Request body: ${JSON.stringify(requestBody, null, 2)}`);
+	logger.debug(`[oinit.ts] Calling oinit CA endpoint: ${normalizedEndpoint}`);
+	logger.debug(`[oinit.ts] Request body: ${JSON.stringify(requestBody, null, 2)}`);
 
 	const response = await fetch(normalizedEndpoint, {
 		method: 'POST',
@@ -42,12 +42,12 @@ export async function fetchOinitCertificate(
 
 	if (!response.ok) {
 		const errorText = await response.text();
-		logger.error(`[oinit] CA request failed: status=${response.status} body=${errorText}`);
+		logger.error(`[oinit.ts] CA request failed: status=${response.status} body=${errorText}`);
 		return null;
 	}
 
 	const data = await response.json();
-	// logger.debug(`[oinit] CA response received: ${data.certificate?.substring(0, 80)}...`);
-	logger.debug(`[oinit] CA response received: ${data.certificate}`);
+	// logger.debug(`[oinit.ts] CA response received: ${data.certificate?.substring(0, 80)}...`);
+	logger.debug(`[oinit.ts] CA response received: ${data.certificate}`);
 	return data.certificate;
 }
