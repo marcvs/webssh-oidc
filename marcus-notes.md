@@ -53,7 +53,7 @@ Also add your webssh user to the `docker` group
 1. As user build the container:
     - With debug logs (in the web-browser)
     ```
-    docker build --build-arg VITE_LOG_LEVEL=debug -t marcvs/webssh-oidc .
+    docker build --build-arg VITE_LOG_LEVEL=debug -t marcvs/webssh-oidc-dev .
     ```
     - Without debug logs:
     ```
