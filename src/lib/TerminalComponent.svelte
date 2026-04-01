@@ -12,7 +12,7 @@
 	export let sessionInfo: TerminalSessionInfo;
 	export let loginParams: {
 		wsUrl: string;
-		sshHost: { hostname: string; port: number };
+		sshInternalHost: { hostname: string; port: number };
 		sshUser: string;
 		accessToken: string;
 		oinitPrivateKey?: string;
@@ -67,8 +67,8 @@
 
 		const libterm = await import('$lib/terminal');
 		const wsConnectUrl = new URL(loginParams.wsUrl + '/connect');
-		wsConnectUrl.searchParams.set('sshHostname', loginParams.sshHost.hostname);
-		wsConnectUrl.searchParams.set('sshPort', loginParams.sshHost.port.toString());
+		wsConnectUrl.searchParams.set('sshHostname', loginParams.sshInternalHost.hostname);
+		wsConnectUrl.searchParams.set('sshPort', loginParams.sshInternalHost.port.toString());
 		wsConnectUrl.searchParams.set('username', loginParams.sshUser);
 		// Pass oinit credentials if available (base64 encoded)
 		if (loginParams.oinitPrivateKey && loginParams.oinitCertificate) {

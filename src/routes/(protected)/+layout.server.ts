@@ -37,12 +37,14 @@ export const load = (async ({ locals }) => {
 			return '';
 		});
 
+	// Determine the certificate hostname (public-facing hostname for SSH)
+	const sshHostname = CONFIG.sshHostname || session.sshHostname;
+
 	// Generate oinit credentials if configured and not already generated
 	if (CONFIG.oinitEndpoint && !session.oinitPrivateKey) {
 		try {
 			const keyPair = generateSshKeyPair();
-			const certHostname = CONFIG.oinitCertHostname || session.sshHostname;
-			const endpoint = `${CONFIG.oinitEndpoint}/${certHostname}/certificate`;
+			const endpoint = `${CONFIG.oinitEndpoint}/${sshHostname}/certificate`;
 			const certificate = await fetchOinitCertificate(
 				locals.session.accessToken,
 				keyPair.publicKey,
@@ -66,6 +68,7 @@ export const load = (async ({ locals }) => {
 		username: username,
 		oinitPrivateKey: session.oinitPrivateKey,
 		oinitCertificate: session.oinitCertificate,
+		sshHostname: sshHostname,
 		session: locals.session
 	};
 }) satisfies LayoutServerLoad;

@@ -21,7 +21,7 @@ export const load = (async () => {
 		providers: providerMap,
 		config: {
 			mcEndpoint: CONFIG.mcEndpoint,
-			sshHost: CONFIG.sshHost
+			sshInternalHost: CONFIG.sshInternalHost
 		}
 	};
 }) satisfies PageServerLoad;

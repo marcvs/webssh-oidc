@@ -11,7 +11,7 @@ const port = process.env.WS_PORT || 8444;
 const sshMethod = process.env.SSH_METHOD || 'mccli';
 const oinitEndpoint = process.env.OINIT_ENDPOINT;
 const sshHostname = process.env.SSH_HOSTNAME;
-const sshCertHostname = process.env.SSH_CERT_HOSTNAME;
+const sshInternalHostname = process.env.SSH_INTERNAL_HOSTNAME || sshHostname;
 
 const app = express();
 ews(app);
@@ -91,7 +91,7 @@ router.ws('/connect', async function (ws, req) {
 				return;
 			}
 
-			const oinitCertUrl = `${oinitEndpoint}/${sshCertHostname || sshHostname}/certificate`;
+			const oinitCertUrl = `${oinitEndpoint}/${sshHostname}/certificate`;
 			logger.debug(`[server.js] oinitCertUrl ${oinitCertUrl}`);
 
 			const keyPair = generateSshKeyPair();

@@ -38,7 +38,7 @@
 
 	const loginParams = {
 		wsUrl: data.wsUrl,
-		sshHost: {
+		sshInternalHost: {
 			hostname: data.userSession.sshHostname,
 			port: data.userSession.sshPort
 		},
@@ -61,7 +61,7 @@
 		accessToken: data.accessToken,
 		mcEndpoint: data.userSession.mcEndpoint,
 		issuer: String(data.session?.profile?.iss ?? ''),
-		sshHost: {
+		sshInternalHost: {
 			hostname: data.userSession.sshHostname,
 			port: data.userSession.sshPort
 		},
@@ -261,7 +261,7 @@
 							<!-- Private Key -->
 							<div class="flex items-center gap-2">
 								<button
-									on:click={() => downloadFile(data.oinitPrivateKey, `id_ed25519_${loginParams.sshHost.hostname}`)}
+									on:click={() => downloadFile(data.oinitPrivateKey, `id_ed25519_${loginParams.sshInternalHost.hostname}`)}
 									class="bg-mc-blue-500 hover:bg-mc-blue-600 text-white font-semibold py-2 px-4 rounded whitespace-nowrap"
 								>
 									Download SSH Private Key
@@ -269,7 +269,7 @@
 								<span class="text-mc-gray text-xs whitespace-nowrap">
 									Save to: <span class="font-mono">~/.ssh/</span><br/>
                                     chmod 600
-                                    ~/.ssh/ide_ed25519_{loginParams.sshHost.hostname}
+                                    ~/.ssh/ide_ed25519_{loginParams.sshInternalHost.hostname}
 								</span>
 								<button
 									on:click={() => copyToClipboard(data.oinitPrivateKey, 'key')}
@@ -283,7 +283,7 @@
 							<!-- Certificate -->
 							<div class="flex items-center gap-2">
 								<button
-									on:click={() => downloadFile(data.oinitCertificate, `id_ed25519_${loginParams.sshHost.hostname}-cert.pub`)}
+									on:click={() => downloadFile(data.oinitCertificate, `id_ed25519_${loginParams.sshInternalHost.hostname}-cert.pub`)}
 									class="bg-mc-blue-500 hover:bg-mc-blue-600 text-white font-semibold py-2 px-4 rounded whitespace-nowrap"
 								>
 									Download SSH Certificate
@@ -302,9 +302,9 @@
 						</div>
 						<div class="flex items-center gap-2">
 							<span class="text-mc-gray text-sm font-medium">SSH command:</span>
-							<code class="font-mono text-sm bg-gray-200 px-2 py-1 rounded">ssh -i ~/.ssh/id_ed25519_{loginParams.sshHost.hostname} -p {loginParams.sshHost.port} oinit@{loginParams.sshHost.hostname}</code>
+							<code class="font-mono text-sm bg-gray-200 px-2 py-1 rounded">ssh -i ~/.ssh/id_ed25519_{data.sshHostname} -p {loginParams.sshInternalHost.port} oinit@{data.sshHostname}</code>
 							<button
-								on:click={() => copyToClipboard(`ssh -i ~/.ssh/id_ed25519_${loginParams.sshHost.hostname} -p ${loginParams.sshHost.port} oinit@${loginParams.sshHost.hostname}`, 'sshCmd')}
+								on:click={() => copyToClipboard(`ssh -i ~/.ssh/id_ed25519_${data.sshHostname} -p ${loginParams.sshInternalHost.port} oinit@${data.sshHostname}`, 'sshCmd')}
 								class="text-mc-gray hover:text-mc-blue-500"
 							>
 								<Icon icon={copiedId === 'sshCmd' ? 'mdi:check' : 'mdi:content-copy'} class="text-lg" />

@@ -8,7 +8,7 @@
 		accessToken: string;
 		mcEndpoint: string;
 		issuer: string;
-		sshHost: { hostname: string; port: number };
+		sshInternalHost: { hostname: string; port: number };
 		sshUser: string;
 	};
 	export let oinitPrivateKey: string | undefined = undefined;
@@ -31,17 +31,17 @@
 		URL.revokeObjectURL(url);
 	}
 
-	const sshCmd = `ssh -p ${loginParams.sshHost.port} ${loginParams.sshUser}@${loginParams.sshHost.hostname}`;
+	const sshCmd = `ssh -p ${loginParams.sshInternalHost.port} ${loginParams.sshUser}@${loginParams.sshInternalHost.hostname}`;
 	const mccliCmd = `mccli --mc-endpoint ${loginParams.mcEndpoint
 		.toString()
 		.replace(/\/$/, '')} --token ${loginParams.accessToken} ssh -p ${
-		loginParams.sshHost.port
-	} ${loginParams.sshHost.hostname}`;
+		loginParams.sshInternalHost.port
+	} ${loginParams.sshInternalHost.hostname}`;
 	const mccliCmdOidcAgent = `mccli --mc-endpoint ${loginParams.mcEndpoint
 		.toString()
 		.replace(/\/$/, '')} --issuer ${loginParams.issuer} ssh -p ${
-		loginParams.sshHost.port
-	} ${loginParams.sshHost.hostname}`;
+		loginParams.sshInternalHost.port
+	} ${loginParams.sshInternalHost.hostname}`;
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'Escape') close();
@@ -91,7 +91,7 @@
 						label="SSH command with certificate:"
 						id="modalOinitSshCmd"
 						open={true}
-						value={`ssh -i ~/.ssh/id_ed25519_${loginParams.sshHost.hostname} -p ${loginParams.sshHost.port} oinit@${loginParams.sshHost.hostname}`}
+						value={`ssh -i ~/.ssh/id_ed25519_${loginParams.sshInternalHost.hostname} -p ${loginParams.sshInternalHost.port} oinit@${loginParams.sshInternalHost.hostname}`}
 					/>
 
 					<!-- Access Token -->
@@ -113,7 +113,7 @@
 					<!-- Private Key -->
 					<div class="flex items-center gap-4">
 						<button
-							on:click={() => downloadFile(oinitPrivateKey, `id_ed25519_${loginParams.sshHost.hostname}`)}
+							on:click={() => downloadFile(oinitPrivateKey, `id_ed25519_${loginParams.sshInternalHost.hostname}`)}
 							class="bg-mc-blue-500 hover:bg-mc-blue-600 text-white font-semibold py-2 px-4 rounded whitespace-nowrap"
 						>
 							Download Private Key
@@ -130,7 +130,7 @@
 					<!-- Certificate -->
 					<div class="flex items-center gap-4">
 						<button
-							on:click={() => downloadFile(oinitCertificate, `id_ed25519_${loginParams.sshHost.hostname}-cert.pub`)}
+							on:click={() => downloadFile(oinitCertificate, `id_ed25519_${loginParams.sshInternalHost.hostname}-cert.pub`)}
 							class="bg-mc-blue-500 hover:bg-mc-blue-600 text-white font-semibold py-2 px-4 rounded whitespace-nowrap"
 						>
 							Download Certificate
@@ -177,8 +177,8 @@
 						label="SSH commands with oinit:"
 						id="modalOinitSshCmd2"
 						open={true}
-						value={`oinit add ${loginParams.sshHost.hostname}       # Tell oinit that ${loginParams.sshHost.hostname} is under oinit control (only needed once)
-ssh -p ${loginParams.sshHost.port} ${loginParams.sshHost.hostname}`}
+						value={`oinit add ${loginParams.sshInternalHost.hostname}       # Tell oinit that ${loginParams.sshInternalHost.hostname} is under oinit control (only needed once)
+ssh -p ${loginParams.sshInternalHost.port} ${loginParams.sshInternalHost.hostname}`}
 					/>
 					</li>
 					<li>

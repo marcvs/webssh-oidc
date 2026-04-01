@@ -17,7 +17,7 @@
 	import logger from '$lib/clientLogger';
 
 	export let providers: Record<string, OP>;
-	export let config: { mcEndpoint: string; sshHost: { hostname: string; port: number } };
+	export let config: { mcEndpoint: string; sshInternalHost: { hostname: string; port: number } };
 	let advanced: boolean = false;
 
 	// default settings
@@ -27,7 +27,7 @@
 	let defaultMcEndpoint: URL;
 
 	// settings for SSH server
-	let sshHost = { ...resetHost };
+	let sshInternalHost = { ...resetHost };
 	let validSsh = false;
 
 	// initial settings for motley-cue
@@ -60,12 +60,12 @@
 			$uiBlock = true;
 			// load default settings from environment variables or use sane defaults
 			try {
-				defaultSsh = hostSchema.parse(config.sshHost);
-				sshHost = { ...defaultSsh };
-				validSsh = isValidHost(sshHost);
-            logger.debug('[LoginComponent] SSH host configured:', JSON.stringify(sshHost));
+				defaultSsh = hostSchema.parse(config.sshInternalHost);
+				sshInternalHost = { ...defaultSsh };
+				validSsh = isValidHost(sshInternalHost);
+            logger.debug('[LoginComponent] SSH host configured:', JSON.stringify(sshInternalHost));
 			} catch (e) {
-				logger.error(`Invalid SSH host: ${config.sshHost}`);
+				logger.error(`Invalid SSH host: ${config.sshInternalHost}`);
 			}
 
 			try {
@@ -262,7 +262,7 @@
             logger.debug('[LoginComponent] handleLogin: starting login flow');
             logger.debug('[LoginComponent] handleLogin: selectedOp =', selectedOp);
             logger.debug('[LoginComponent] handleLogin: mcEndpoint =', mcEndpoint.toString());
-            logger.debug('[LoginComponent] handleLogin: sshHost =', JSON.stringify(sshHost));
+            logger.debug('[LoginComponent] handleLogin: sshInternalHost =', JSON.stringify(sshInternalHost));
 
 			if (!selectedOp || !isKeyOf(selectedOp, providers)) {
 				throw new Error('Invalid OIDC provider');
@@ -277,9 +277,9 @@
 				'?mcEndpoint=' +
 				encodeURIComponent(mcEndpoint.toString()) +
 				'&sshHostname=' +
-				encodeURIComponent(sshHost.hostname) +
+				encodeURIComponent(sshInternalHost.hostname) +
 				'&sshPort=' +
-				sshHost.port.toString();
+				sshInternalHost.port.toString();
             logger.debug('[LoginComponent] handleLogin: callbackUrl =', callbackUrl);
 			await signIn(op.id, { callbackUrl: callbackUrl }, { scope: opInfo.scopes.join(' ') });
 		} catch (e) {
@@ -358,11 +358,11 @@
 					/>
 					<MyInputHost
 						title="SSH"
-						host={sshHost}
+						host={sshInternalHost}
 						defaultHost={defaultSsh}
 						disabled={$uiBlock}
 						on:change={({ detail }) => {
-							sshHost = { ...detail };
+							sshInternalHost = { ...detail };
 							validSsh = true;
 						}}
 					/>

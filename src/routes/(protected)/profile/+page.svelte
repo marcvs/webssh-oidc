@@ -10,7 +10,7 @@
 		user: data.session?.user.name ?? data.session?.user.email ?? data.session?.user.id ?? 'User',
 		accessToken: data.accessToken,
 		mcEndpoint: data.userSession.mcEndpoint,
-		sshHost: {
+		sshInternalHost: {
 			hostname: data.userSession.sshHostname,
 			port: data.userSession.sshPort
 		},
