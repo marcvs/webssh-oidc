@@ -83,6 +83,14 @@
 		URL.revokeObjectURL(url);
 	}
 
+	function downloadSshCredentials() {
+		const hostname = data.sshHostname;
+		downloadFile(data.oinitPrivateKey, `id_ed25519_${hostname}`);
+		setTimeout(() => {
+			downloadFile(data.oinitCertificate, `id_ed25519_${hostname}-cert.pub`);
+		}, 100);
+	}
+
 	function copyToClipboard(content: string, id: string) {
 		navigator.clipboard.writeText(content).then(() => {
 			copiedId = id;
@@ -230,7 +238,7 @@
 					on:click={() => credentialsDrawerOpen = !credentialsDrawerOpen}
 					class="flex items-center justify-between w-full text-sm text-mc-gray px-3 py-1 hover:bg-gray-100"
 				>
-					<span>SSH Certificate Credentials</span>
+					<span class="text-mc-orange">Download Access Token &nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp; Download SSH Certificate Credentials</span>
 					<Icon icon={credentialsDrawerOpen ? 'mdi:chevron-down' : 'mdi:chevron-up'} class="text-base" />
 				</button>
 
@@ -258,18 +266,17 @@
 								</button>
 							</div>
 
-							<!-- Private Key -->
+							<!-- SSH Credentials (Private Key + Certificate) -->
 							<div class="flex items-center gap-2">
 								<button
-									on:click={() => downloadFile(data.oinitPrivateKey, `id_ed25519_${loginParams.sshInternalHost.hostname}`)}
+									on:click={downloadSshCredentials}
 									class="bg-mc-blue-500 hover:bg-mc-blue-600 text-white font-semibold py-2 px-4 rounded whitespace-nowrap"
 								>
-									Download SSH Private Key
+									Download SSH Credentials (Key + Cert)
 								</button>
 								<span class="text-mc-gray text-xs whitespace-nowrap">
-									Save to: <span class="font-mono">~/.ssh/</span><br/>
-                                    chmod 600
-                                    ~/.ssh/ide_ed25519_{loginParams.sshInternalHost.hostname}
+									Save both to: <span class="font-mono">~/.ssh/</span><br/>
+									<span class="font-mono">chmod 600 ~/.ssh/id_ed25519_{data.sshHostname}</span>
 								</span>
 								<button
 									on:click={() => copyToClipboard(data.oinitPrivateKey, 'key')}
@@ -278,19 +285,6 @@
 									<span class="text-sm">Private Key</span>
 									<Icon icon={copiedId === 'key' ? 'mdi:check' : 'mdi:content-copy'} class="text-lg" />
 								</button>
-							</div>
-
-							<!-- Certificate -->
-							<div class="flex items-center gap-2">
-								<button
-									on:click={() => downloadFile(data.oinitCertificate, `id_ed25519_${loginParams.sshInternalHost.hostname}-cert.pub`)}
-									class="bg-mc-blue-500 hover:bg-mc-blue-600 text-white font-semibold py-2 px-4 rounded whitespace-nowrap"
-								>
-									Download SSH Certificate
-								</button>
-								<span class="text-mc-gray text-xs whitespace-nowrap">
-									Save to: <span class="font-mono">~/.ssh/</span>
-								</span>
 								<button
 									on:click={() => copyToClipboard(data.oinitCertificate, 'cert')}
 									class="flex items-center gap-1 text-mc-gray hover:text-mc-blue-500"
