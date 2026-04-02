@@ -56,16 +56,16 @@
 </script>
 
 <div class="flex flex-col gap-4 h-fit">
-	<h1 class="text-2xl font-semibold text-mc-gray">Commandline Login</h1>
-	<p class="text-mc-gray">
+	<h1 class="text-2xl font-semibold text-mc-gray dark:text-gray-300">Commandline Login</h1>
+	<p class="text-mc-gray dark:text-gray-300">
 		The alternative to this web SSH login is to use the command line. There are several options to
 		login to an SSH server with OpenId Connect using the commandline:
 	</p>
 
 
-	<h2 class="text-xl font-semibold text-mc-gray">1. ssh certificates</h2>
+	<h2 class="text-xl font-semibold text-mc-gray dark:text-gray-300">1. ssh certificates</h2>
 
-	<p class="text-mc-gray">
+	<p class="text-mc-gray dark:text-gray-300">
 		This tool uses SSH certificates signed by a CA instead of
 		traditional SSH keys. This provides short-lived credentials that are automatically issued based on
 		your OIDC identity.
@@ -135,12 +135,12 @@
 	{/if}
 
 
-	<h2 class="text-xl font-semibold text-mc-gray">2. oinit</h2>
+	<h2 class="text-xl font-semibold text-mc-gray dark:text-gray-300">2. oinit</h2>
 
-    <p class="text-mc-gray">For easier access from the commandline, we
+    <p class="text-mc-gray dark:text-gray-300">For easier access from the commandline, we
     recommend to install the tools <span class="font-mono">oinit</span>
     and <span class="font-mono">oidc-agent</span>:</p>
-	<ul class="list-disc list-inside text-mc-gray">
+	<ul class="list-disc list-inside text-mc-gray dark:text-gray-300">
 		<li>
             Install the corresponding package repository for your linux
             distribution. Details at:
@@ -183,9 +183,9 @@ ssh -p ${loginParams.sshInternalHost.port} ${loginParams.sshInternalHost.hostnam
 
 
     <hr/>
-	<h1 class="text-2xl font-semibold text-mc-gray">Resources</h1>
-	<p class="text-mc-gray">Here are some resources to help you get started with SSH-OIDC.</p>
-	<ul class="list-disc list-inside text-mc-gray">
+	<h1 class="text-2xl font-semibold text-mc-gray dark:text-gray-300">Resources</h1>
+	<p class="text-mc-gray dark:text-gray-300">Here are some resources to help you get started with SSH-OIDC.</p>
+	<ul class="list-disc list-inside text-mc-gray dark:text-gray-300">
         <li>
             The documentation of ssh-oidc
 			<a

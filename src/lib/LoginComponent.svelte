@@ -292,10 +292,10 @@
 	};
 </script>
 
-<div class="bg-white -mt-64 rounded-lg shadow w-full max-w-[500px] mx-auto p-10">
+<div class="bg-white dark:bg-gray-800 -mt-64 rounded-lg shadow w-full max-w-[500px] mx-auto p-10">
 	<div>
 		<img class="mx-auto h-12 w-auto" src={logo} alt="webssh-oidc logo" />
-		<h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-mc-gray">SSH with OIDC</h2>
+		<h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-mc-gray dark:text-gray-200">SSH with OIDC</h2>
 	</div>
 	{#if $errorMessage}
 		<MyAlert />

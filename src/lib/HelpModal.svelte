@@ -61,11 +61,11 @@
 	/>
 
 	<!-- Modal -->
-	<div class="fixed inset-4 bg-white rounded-lg shadow-xl z-50 flex flex-col overflow-hidden">
+	<div class="fixed inset-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 flex flex-col overflow-hidden">
 		<!-- Header -->
-		<div class="flex items-center justify-between px-6 py-3 border-b">
-			<h1 class="text-xl font-semibold text-mc-gray">Commandline Login</h1>
-			<button on:click={close} class="text-mc-gray hover:text-mc-blue-500">
+		<div class="flex items-center justify-between px-6 py-3 border-b dark:border-gray-600">
+			<h1 class="text-xl font-semibold text-mc-gray dark:text-gray-200">Commandline Login</h1>
+			<button on:click={close} class="text-mc-gray dark:text-gray-300 hover:text-mc-blue-500">
 				<Icon icon="mdi:close" class="text-2xl" />
 			</button>
 		</div>
@@ -73,14 +73,14 @@
 		<!-- Content -->
 		<div class="flex-1 overflow-y-auto px-6 py-4">
 			<div class="flex flex-col gap-4">
-				<p class="text-mc-gray">
+				<p class="text-mc-gray dark:text-gray-300">
 					The alternative to this web SSH login is to use the command line. There are several options to
 					login to an SSH server with OpenId Connect using the commandline:
 				</p>
 
-				<h2 class="text-xl font-semibold text-mc-gray">1. ssh certificates</h2>
+				<h2 class="text-xl font-semibold text-mc-gray dark:text-gray-300">1. ssh certificates</h2>
 
-				<p class="text-mc-gray">
+				<p class="text-mc-gray dark:text-gray-300">
 					This tool uses SSH certificates signed by a CA instead of
 					traditional SSH keys. This provides short-lived credentials that are automatically issued based on
 					your OIDC identity.
@@ -148,12 +148,12 @@
 					</p>
 				{/if}
 
-				<h2 class="text-xl font-semibold text-mc-gray">2. oinit</h2>
+				<h2 class="text-xl font-semibold text-mc-gray dark:text-gray-300">2. oinit</h2>
 
-				<p class="text-mc-gray">For easier access from the commandline, we
+				<p class="text-mc-gray dark:text-gray-300">For easier access from the commandline, we
 				recommend to install the tools <span class="font-mono">oinit</span>
 				and <span class="font-mono">oidc-agent</span>:</p>
-				<ul class="list-disc list-inside text-mc-gray">
+				<ul class="list-disc list-inside text-mc-gray dark:text-gray-300">
 					<li>
 						Install the corresponding package repository for your linux
 						distribution. Details at:
@@ -195,9 +195,9 @@ ssh -p ${loginParams.sshInternalHost.port} ${loginParams.sshInternalHost.hostnam
 				</ul>
 
 				<hr/>
-				<h1 class="text-2xl font-semibold text-mc-gray">Resources</h1>
-				<p class="text-mc-gray">Here are some resources to help you get started with SSH-OIDC.</p>
-				<ul class="list-disc list-inside text-mc-gray">
+				<h1 class="text-2xl font-semibold text-mc-gray dark:text-gray-300">Resources</h1>
+				<p class="text-mc-gray dark:text-gray-300">Here are some resources to help you get started with SSH-OIDC.</p>
+				<ul class="list-disc list-inside text-mc-gray dark:text-gray-300">
 					<li>
 						The documentation of ssh-oidc
 						<a
