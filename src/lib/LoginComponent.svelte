@@ -101,7 +101,7 @@
 			defaultOps = await loadOpsWrapper(fetch, mcEndpoint);
             logger.debug('[LoginComponent] Loaded OPs:', defaultOps);
 			supportedOps = [...defaultOps];
-			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value));
+			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value.replace(/\/+$/, '')));
             logger.debug('[LoginComponent] Filtered OPs:', filteredOps);
 			
 			// Handle IdP hinting
@@ -180,7 +180,7 @@
 			mcEndpoint = defaultMcEndpoint;
             logger.debug('[LoginComponent] reloadOPs: using defaultMcEndpoint =', mcEndpoint.toString());
 			supportedOps = defaultOps;
-			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value));
+			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value.replace(/\/+$/, '')));
 			validMc = true;
 			return;
 		}
@@ -193,7 +193,7 @@
 			if (!supportedOps || !supportedOps.length) {
 				throw new Error('No supported OPs');
 			}
-			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value));
+			filteredOps = supportedOps.filter((value: string) => Object.keys(providers).includes(value.replace(/\/+$/, '')));
 			validMc = true;
 		} catch (e) {
 			supportedOps = [];
@@ -264,11 +264,12 @@
             logger.debug('[LoginComponent] handleLogin: mcEndpoint =', mcEndpoint.toString());
             logger.debug('[LoginComponent] handleLogin: sshInternalHost =', JSON.stringify(sshInternalHost));
 
-			if (!selectedOp || !isKeyOf(selectedOp, providers)) {
+			const normalizedOp = selectedOp?.replace(/\/+$/, '');
+			if (!normalizedOp || !isKeyOf(normalizedOp, providers)) {
 				throw new Error('Invalid OIDC provider');
 			}
 
-			let op = providers[selectedOp];
+			let op = providers[normalizedOp];
             logger.debug('[LoginComponent] handleLogin: fetching OP info for', selectedOp);
 			let opInfo = await loadOpInfo(fetch, mcEndpoint, selectedOp);
             logger.debug('[LoginComponent] handleLogin: opInfo =', JSON.stringify(opInfo));
